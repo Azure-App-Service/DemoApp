@@ -34,6 +34,14 @@ The following diagram illustrates the overall system architecture.
 
 The main components of the application are described in subsequent sections in this document.
 
+## Containers
+
+2 Docker images implement the system, each runs in it's own container and they communicate via HTTP/HTTPS.
+
+The following diagram illustrates the containers.
+
+![](Images/containers.jpg)
+
 ### Web App
 
 #### Back-end 
@@ -171,6 +179,27 @@ The PostgreSQL database is used by the Chat App. It is very simple and only cont
 | -------------------- | ----------------------------------- |
 | messages             | Stores all the messages             |
 | message_read_records | Records users' last read message id |
+
+## Application Insights
+
+Throughout the application, custom events are logged to Application Insights.
+
+The following table describes the custom events logged to Application Insights at a high level.
+
+| Source            | Triggers                         				 	|
+| ----------------- | -------------------------------------------------	|
+| Python Web App    | Python REST API, Function, and Logic App Calls 	|
+| Python REST API 	| Python REST API, Function, and Logic App Calls 	| 
+| Azure Function	| Start, Events Taking Place In Function, Complete	|
+| Logic App		  	| Start, Events Taking Place In Logic App, Complete	|
+
+This image shows custom events logged to Application Insights.
+
+![](Images/application-insights-1.jpg)
+
+The following image shows the detail of a custom event.  In this example, the /api/messages/summary Python REST API was successfully invoked.
+ 
+![](Images/application-insights-2.jpg)
 
 ## Deployment
 
