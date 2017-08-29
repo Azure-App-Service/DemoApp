@@ -1,0 +1,2 @@
+class MessageReadRecord < ApplicationRecord
+end

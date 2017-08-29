@@ -1,0 +1,37 @@
+<header [isLoginPage]="false"></header>
+<div class="title">
+    <div class="left">
+        <a href="/search" >Back</a>
+    </div>
+    <div class="rest">
+        <h2>Conversation</h2>
+    </div>
+</div>
+<div class="main">
+    <div class="left">
+        <ul  *ngFor="let message of existedMessages" >
+            <li [class.ownByme]="message.ownByMe">
+                <div class="top">
+                    <img  src="{{message.profile?.avatar_url}}" />
+                    <span class="name">{{message.profile?.name}}</span>
+                    <span class="created">{{message.created}}</span>
+                </div>
+                <div class="bottom">
+                    {{message.content}}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <div class="message">
+            <textarea name="content"  [(ngModel)]="msgContent"  class="content"></textarea>
+        </div>
+        <div class="send">
+            <div class="button">
+                <a class="btn btn-default"  href="javascript:void(0)"  (click)="sendMessage()"  [class.btnDisabled]="btnDisabled">
+                    Send
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

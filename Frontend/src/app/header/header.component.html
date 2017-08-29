@@ -1,0 +1,55 @@
+<div *ngIf='!isLoginPage' class='header non-login'>
+  <h1 class='title'>
+    <div class="search-icon"></div>
+    <div class="content">{{title}}</div>
+    <div class="notification-logout">
+        <div class="notification" [ngClass]="notifications.length>0 ? 'count' : ''" (click)="showOrHideNotification($event)">
+            <div class="num"  [hidden]="notifications.length==0">{{notificationsSummaryCount}}</div>
+            <div class="content" [hidden]="!isNotificationVisible">
+                <div class="fn-area">
+                    <span>Notification</span>
+                    <span (click)="hideNotification()">X</span>
+                </div>
+                <ul *ngFor="let notification of notifications" >
+                    <li (click)="goChat(notification.fromUserId)">You have {{notification.messageCount}} new message<label *ngIf="notification.messageCount>1"></label> from {{notification.fromUserName}}</li>
+                </ul>
+            </div>
+        </div>
+        <select  (change)="logout($event.target.value)">
+            <option value='{{logoutDefault}}'>Select to logout</option>
+            <option value='{{logoutUrl}}'>Logout</option>
+            <option value='{{logoutClearUrl}}'>Logout and clear data</option>
+        </select>
+    </div>
+    
+  </h1>
+  <h1 class='banner'>
+        <div class="content">
+            {{banner}}
+        </div>
+        <div class="bg"></div>
+        <div class="button">
+            <a class="btn btn-default"  href="{{learnMoreUrl}}">Learn more</a>
+        </div>
+    </h1>
+</div>
+<div *ngIf='isLoginPage' class='header login'>
+    <h1 class='title'>
+       <div class="left">
+            <div class="search-icon"></div>
+       </div>
+       <div class="right">
+            <div class="title-top">{{titleTop}}</div>
+            <div class="title-bottom">{{titleBottom}}</div>
+       </div>
+    </h1>
+    <h1 class='banner'>
+        <div class="content">
+            {{banner}}
+        </div>
+        <div class="bg"></div>
+        <div class="button">
+            <a class="btn btn-default"  href="{{learnMoreUrl}}">Learn more</a>
+        </div>
+    </h1>
+</div>

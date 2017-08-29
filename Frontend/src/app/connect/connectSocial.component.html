@@ -1,0 +1,13 @@
+<header [isLoginPage]="false"></header>
+<div class="buttons">
+      <h2>Welcome {{profile?.name}}!</h2>
+      <div class="button">
+            <a *ngIf="hasLinkedInConnected" class="btn btn-default"  href="{{connectGitHubUrl}}">
+                Connect my GitHub Profile
+            </a>
+            <a *ngIf="hasGithubConnected" class="btn btn-default"  href="{{connectLinkedinUrl}}">
+                Connect my LinkedIn Profile
+            </a>
+      </div>
+      <a class='search' href="javascript:void(0)" (click)="skipTo()"  >Skip this step and continue</a>
+</div>      

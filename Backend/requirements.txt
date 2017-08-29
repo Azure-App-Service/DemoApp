@@ -1,0 +1,5 @@
+flask-script
+flask_restful
+social-auth-app-flask-peewee
+git+https://github.com/PyMySQL/PyMySQL.git
+twilio

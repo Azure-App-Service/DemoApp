@@ -1,0 +1,129 @@
+<header [isLoginPage]="false"></header>
+<div class="search">
+    <div class="filters">
+        <h2>Search Filters</h2>
+        <ul>
+            <li>
+                Programming Skills:
+                <input class="skills" [(ngModel)]="searchModel.skills"   />
+            </li>
+            <li>
+                Role:
+                <input class="role" [(ngModel)]="searchModel.role"   />
+            </li>
+            <li>
+                Location:
+                <input class="location" [(ngModel)]="searchModel.location"   />
+            </li>
+            <li>
+                Company:
+                <input class="company" [(ngModel)]="searchModel.company"  /></li>
+            <li>
+            <li>
+                Name:
+                <input class="name"  [(ngModel)]="searchModel.name"  />
+            </li>
+            <li>
+                <h5>Available for hire:</h5>
+                <div class="hire-opt">
+                    <input type="checkbox" class="hireable" [(ngModel)]="searchModel.hireableYes" name="hireableyes" id="hireableyes" /><label for="hireableyes">Yes</label>
+                </div>
+                <div class="hire-opt">
+                    <input type="checkbox" class="hireable" [(ngModel)]="searchModel.hireableNo" name="hireableno" id="hireableno"   /><label for="hireableno">No</label>
+                </div>
+                <div class="hire-opt">
+                    <input type="checkbox" class="hireable" [(ngModel)]="searchModel.hireableUnknown" name="hireableunknown"  id="hireableunknown"  /><label for="hireableunknown">Unknown</label>
+                </div>
+            </li>
+        </ul>
+        <div class="button">
+            <a class="btn btn-default"  href="javascript:void(0)" (click)="(!disableSearch) && doSearch()" [class.disabled]="disableSearch">
+                Search
+            </a>
+        </div>
+    </div>
+    <div class="result">
+        <div class="suggested">
+            <div class="header" [class.padding-top]="suggestedFriends.length==0">
+                <h3> Suggested Friends</h3>
+            </div>
+            <div class="spinner" [hidden]="!ifShowSuggestSpinner"></div>
+            <div class="person" *ngFor="let friend of suggestedFriends">
+                <div class="profile" (click)="viewProfile(friend.friendProfile.id)" [ngStyle]="{'background-image': 'url(' + friend.friendProfile.avatar_url + ')'}"></div>
+                <div class="info">
+                    <div class="name">
+                        {{friend.friendProfile?.name}}
+                    </div>
+                    <div class="position">
+                        <ul>
+                            <li>
+                                {{friend.friendProfile?.position}}
+                            </li>
+                            <li>
+                                {{friend.friendProfile?.company}}
+                            </li>
+                            <li>
+                                {{friend.friendProfile?.skills}}
+                            </li>
+                            <li>
+                               {{friend.friendProfile?.location}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="function">
+                        <div  title="{{friend.disableAddFriendTip}}" class="chat bg-img"  (click)="doChat(friend.friendProfile.id)">
+                            Chat
+                        </div>
+                        <div  title="{{friend.disableAddFriendTip}}" class="bg-img" [ngClass]="friend.isAlreadyFriend ? 'friend' : 'add-friend'" (click)="addFriend(friend.friendProfile.id,'suggested')">
+                            Friend
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tip"  [hidden]="hasCompleteSuggested == false || (suggestedFriends.length > 0)">
+                None suggested friend could be found.
+            </div>
+            <hr/>
+        </div>
+        <h3>Search Results</h3>
+        <div class="tip"  [hidden]="hasSearched">
+            Please enter your search criteria to perform a search.
+        </div>
+        <div class="searched" [hidden]="!hasSearched">
+            <div class="spinner"  [hidden]="!ifShowSearchSpinner"></div>
+            <div class="person"  *ngFor="let friend of searchedFriends">
+                <div class="profile" (click)="viewProfile(friend.friendProfile.id)" [ngStyle]="{'background-image': 'url(' + friend.friendProfile.avatar_url + ')'}"></div>
+                <div class="info">
+                    <div class="name">
+                        {{friend.friendProfile?.name}}
+                    </div>
+                    <div class="position">
+                        <ul>
+                            <li>
+                                {{friend.friendProfile?.position}}
+                            </li>
+                            <li>
+                                {{friend.friendProfile?.company}}
+                            </li>
+                            <li>
+                                {{friend.friendProfile?.skills}}
+                            </li>
+                            <li>
+                               {{friend.friendProfile?.location}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="function">
+                        <div  title="{{friend.disableAddFriendTip}}" class="chat bg-img"  (click)="doChat(friend.friendProfile.id,'searched')">
+                            Chat
+                        </div>
+                        <div title="{{friend.disableAddFriendTip}}" class="bg-img" [ngClass]="friend.isAlreadyFriend ? 'friend' : 'add-friend'" (click)="addFriend(friend.friendProfile.id,'searched')">
+                            Friend
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>

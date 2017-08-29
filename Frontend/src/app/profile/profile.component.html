@@ -1,0 +1,94 @@
+<header [isLoginPage]="false"></header>
+<div class="profile container">
+    <h1>{{isEditMode?'My ':''}}Profile</h1>
+    <div class="left">
+        <div class="top">
+            <img alt="{{currentProfile.name}}" class="avatar rounded-2" width="72" src="{{currentProfile.avatar_url}}" />
+            <ul>
+                <li class="name"><h3>{{currentProfile.name}}</h3></li>
+                <li>{{currentProfile.company}}</li>
+                <li>{{currentProfile.location}}</li>
+                <li class="phone">Phone<label class="validate sign" *ngIf="isEditMode">*</label><input class="phoneNumber" [(ngModel)]="currentProfile.phone_number" type="text" [hidden]="!isEditMode" (ngModelChange)="checkPhoneNumber($event)"  />
+                    <label [hidden]="isEditMode">{{currentProfile.phone_number}}</label>
+                    <div><label class="validate tip" [hidden]="isValidated" >Please enter phone number.</label></div>
+                </li>
+                <li *ngIf="!isEditMode">
+                    <div class="function">
+                        <div  title="{{disableAddFriendTip}}"  class="chat bg-img"  (click)="doChat(currentProfile.id)">
+                            Chat
+                        </div>
+                        <div title="{{disableAddFriendTip}}" class="bg-img" [ngClass]="isAlreadyFriend ? 'friend' : 'add-friend'" (click)="addFriend(currentProfile.id,'searched')">
+                            Friend
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="bottom">
+            <div class="bio">{{currentProfile.bio}}</div>
+            <div class="button-area" >
+                <button *ngIf="isEditMode"  class="profile-btn" (click)="saveProfile()">Save</button>
+                <button class="profile-btn" (click)="goTo('connect')"  *ngIf="hasAccountNotConnected">Back to Connect</button>
+                <button class="profile-btn" (click)="goTo('search')">Go to Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+       <table>
+            <tr>
+                <th>Available for hire</th>
+                <td>{{currentProfile.hireable==null?'Unknown':(currentProfile.hireable?'Yes':'No')}}</td>
+            </tr>
+             <tr>
+                <th>Programming Skills</th>
+                <td><textarea class="skills" [(ngModel)]="currentProfile.skills" type="text" [hidden]="!isEditMode"></textarea><label [hidden]="isEditMode">{{currentProfile.skills}}</label></td>
+            </tr>
+            <tr>
+                <th>Blog</th>
+                <td>
+                    <a target="_blank" href="{{currentProfile.blog_url}}">{{currentProfile.blog_url}}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>LinkedIn public profile URL</th>
+                <td>
+                    <a target="_blank" href="{{currentProfile.linkedin_public_profile_Url}}">{{currentProfile.linkedin_public_profile_Url}}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>GitHub profile</th>
+                <td>
+                    <a target="_blank" href="{{currentProfile.github_profile_url}}">{{currentProfile.github_profile_url}}</a>
+                </td>
+            </tr>
+            <tr>
+                <th>LinkedIn Connections</th>
+                <td>{{currentProfile.num_connections}}</td>
+            </tr>
+            <tr>
+                <th>Number of Public Repos</th>
+                <td>{{currentProfile.public_repos}}</td>
+            </tr>
+            <tr>
+                <th>Number of Public Gists</th>
+                <td>{{currentProfile.public_gists}}</td>
+            </tr>
+            <tr>
+                <th>GitHub Followers</th>
+                <td>{{currentProfile.followers}}</td>
+            </tr>
+            <tr>
+                <th>Following on GitHub</th>
+                <td>{{currentProfile.following}}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{currentProfile.position}}</td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td>{{currentProfile.location}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

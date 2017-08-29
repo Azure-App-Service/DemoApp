@@ -1,0 +1,37 @@
+.header{text-align: center;background-color:#59A9CF;}
+
+.header .search-icon{display: inline-block;background-image: url(/assets/images/search-icon.png);width: 65px;height: 65px;background-repeat: no-repeat;background-size: 65px 65px;}
+
+.header h1{color:#fff;font-weight: normal;padding: 0;font-size: 35px; margin:0px;}
+.header h1:first-child{font-size:20px;}
+.header h1:last-child{font-size:15px;background-color:#E4E4E4;color:#000;}
+
+.header.non-login>h1.title{text-align: left;height: 46px;vertical-align: top;padding-top: 5px;padding-left: 10px;padding-right: 20px;}
+.header.non-login>h1.title>div{display:inline-block;}
+.header.non-login .content{width:69%;vertical-align:top;padding-top:12px;}
+.header.login .search-icon{width: 240px;height: 240px;background-size: 240px 240px;}
+.header.login h1{height:auto;}
+.header.login h1 > div{display:inline-block;}
+.header.login h1 .left{width:39%;text-align: right;}
+.header.login h1 .right{width:60%;text-align:left;vertical-align: top;padding-top: 70px;}
+.header.login h1 div.title-top{font-size:50px;}
+.header.login h1 div.title-bottom{font-size:30px;font-weight:300;}
+.header.login h1 .banner{background-color:#E4E4E4;color:#000;font-size:20px;}
+
+.header .banner {padding: 0;vertical-align: top;}
+.header .banner >div{vertical-align: top;display: inline-block;}
+.header .banner .content{font-size: 25px;margin-left: 40px;padding-top: 50px;width:55%;text-align: center;}
+.header .banner .bg{background-image:url(/assets/images/banner-bg-cover.png);background-size:326px 113px;background-repeat: no-repeat;width:326px;height:113px;    margin-left: 30px;}
+.header .banner .button{padding-top: 50px;padding-left: 30px;}
+.header .banner .button a{background-color:#00A651;border-radius:5px;width:135px; height:43px;padding:13px 26px;}
+
+.header .notification-logout {float:right;margin-top: 10px;}
+.header .notification-logout .notification {width: 25px;height: 25px;display: inline-block;vertical-align: top;background-image:url('/assets/images/notifications.png');background-repeat: no-repeat;background-size: 25px 25px;margin-right: 25px;}
+.header .notification-logout .notification.count {background-image:url('/assets/images/notifications-count.png');width: 29px;height: 25px;background-size: 29px 29px;background-position-y: -2px;position:relative;cursor:pointer;}
+.header .notification-logout .notification.count .num{position: absolute;top: 1px;right: 3px;font-size: 12px;transform: scale(0.7);}
+.header .notification-logout .notification.count .content {position: absolute;width: 275px;height: 69px;background-color:#fff;top: 36px;left: -62px;overflow-y: auto;padding: 10px;color:#000;}
+.header .notification-logout .notification.count .content .fn-area{font-size: 18px;}
+.header .notification-logout .notification.count .content .fn-area>span:last-child{float:right;}
+.header .notification-logout .notification.count .content ul{list-style: none;margin: 0;padding: 10px 0 0 0;font-size: 14px;}
+
+

@@ -1,0 +1,11 @@
+h3{font-size:45px;}
+.buttons{display:inline-block;width:30%;}
+.buttons .button{display:inline-block;}
+.buttons .button > *{text-align: center;}
+.buttons .button > img{margin-left: 30px;display: inline-block;}
+.buttons .button > a{margin-left: 53px !important;}
+.buttons:nth-of-type(1){border-right:1px solid;}
+.buttons a.btn{display: block;margin-left: 0 !important;}
+.buttons .tip > *{ display:inline-block;}
+.buttons .tip > h5{font-weight:normal;}
+.buttons .tip > a{text-decoration:none;}

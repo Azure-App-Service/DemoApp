@@ -1,0 +1,76 @@
+{
+    "$connections": {
+        "value": {
+            "twilio": {
+                "connectionId": "/subscriptions/3b7912c3-ad06-426e-8627-41912372774b/resourceGroups/AzureLinuxWebAppDev/providers/Microsoft.Web/connections/twilio",
+                "connectionName": "twilio",
+                "id": "/subscriptions/3b7912c3-ad06-426e-8627-41912372774b/providers/Microsoft.Web/locations/westus/managedApis/twilio"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Response": {
+                "inputs": {
+                    "body": "@body('Send_Text_Message_(SMS)')",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "statusCode": 200
+                },
+                "runAfter": {
+                    "Send_Text_Message_(SMS)": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Response"
+            },
+            "Send_Text_Message_(SMS)": {
+                "inputs": {
+                    "body": {
+                        "body": "@triggerBody()?['message']",
+                        "from": "+185********",
+                        "to": "@triggerBody()?['to']"
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['twilio']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/Messages.json"
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "to": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

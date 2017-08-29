@@ -1,0 +1,25 @@
+export class Profile{
+    id?:number;
+    github_profile_url?:string;
+    linkedinStandardProfileUrl?:string;
+    linkedin_public_profile_Url?:string;
+    avatar_url?:string;
+    bio?:string;
+    company?:string;
+    location?:string;
+    name?:string;
+    blog_url?:string;
+    hireable?:boolean;
+    public_repos?:number;
+    public_gists?:number;
+    followers?:number;
+    following?:number;
+    industryId?:number;
+    num_connections?:number;
+    numConnectionsCapped?:number;
+    specialties?:string;
+    phone_number?:string;
+    skills?:string;
+    positions?:string[];
+    position?:string;
+}

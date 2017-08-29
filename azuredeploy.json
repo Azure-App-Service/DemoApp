@@ -1,0 +1,590 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webAppName": {
+      "type": "string",
+      "defaultValue": "developer-finder",
+      "metadata": {
+        "description": "The name of the web client app that you wish to create."
+      }
+    },
+    "nonLinuxWebAppLocation": {
+      "type": "string",
+      "defaultValue": "",
+      "allowedValues": [
+        "South Central US",
+        "North Europe",
+        "West Europe",
+        "Southeast Asia",
+        "East Asia",
+        "West US",
+        "East US",
+        "Japan West",
+        "Japan East",
+        "East US 2",
+        "North Central US",
+        "Central US",
+        "Brazil South",
+        "Australia East",
+        "Australia Southeast",
+        "Central India",
+        "West India",
+        "South India",
+        "Canada Central",
+        "Canada East",
+        "West Central US",
+        "West US 2",
+        "UK West",
+        "UK South",
+        "Korea South",
+        "Korea Central"
+      ],
+      "metadata": {
+        "description": "Web App on Linux will use the resource group location. Please choose a different region for non-Linux web apps, as they could not be created in the same region and the same resource group."
+      }
+    },
+    "oauthGitHubClientID": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "oauthGitHubClientSecret": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "oauthLinkedInClientId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "oauthLinkedInClientSecret": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "databaseAdminLoginName": {
+      "type": "string",
+      "defaultValue": "developer_finder",
+      "metadata": {
+        "description": "Admin login name cannot be 'azure_superuser', 'admin', 'administrator', 'root', 'guest' or 'public'."
+      }
+    },
+    "databaseAdminLoginPassword": {
+      "type": "securestring",
+      "defaultValue": "",
+      "metadata": {
+        "description": "This field should be between 8 and 128 characters long. Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.)."
+      }
+    },
+    "rubyChatDockerImage": {
+      "type": "string",
+      "defaultValue": "tylerlu/ruby-chat",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "twilioAccountSID": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "twilioAuthToken": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "twilioFromPhoneNumber": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": ""
+      }
+    },
+    "sourceCodeRepositoryURL": {
+      "type": "string",
+      "defaultValue": "https://github.com/<YOUR REPOSITORY>/DemoApp",
+      "metadata": {
+        "description": "Source code repository URL"
+      }
+    },
+    "sourceCodeBranch": {
+      "type": "string",
+      "defaultValue": "master",
+      "metadata": {
+        "description": "Sourcecode Repo branch"
+      }
+    },
+    "sourceCodeManualIntegration": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Use 'true' if you are deploying from the base repo, 'false' if you are deploying from your own fork. If you're using 'false', make sure you have admin permissions to the repo. If you get an error, you should add GitHub integration to another web app manually, so that you get a GitHub access token associated with your Azure Subscription."
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "webAppName": "[parameters('webAppName')]",
+    "chatAppName": "[concat(parameters('webAppName'), '-chat')]",
+    "functionAppName": "[concat(parameters('webAppName'), '-function')]",
+    "containerRegistryName": "[replace(variables('webAppName'), '-', '')]",
+    "storageAccountName": "[replace(variables('webAppName'), '-', '')]",
+    "applicationInsightsName":"[parameters('webAppName')]",
+    "webAppServicePlanName": "[variables('webAppName')]",
+    "chatAppServicePlanName": "[variables('chatAppName')]",
+    "functionAppServicePlanName": "[variables('functionAppName')]",
+    "sendSMSLogicAppName": "send-sms",
+    "mySQLServerName": "[variables('webAppName')]",
+    "postgreSQLServerName": "[variables('chatAppName')]",
+    "mySQLDatabaseName": "developer_finder",
+    "postgreSQLDatabaseName": "chat",
+    "webAppDockerImage": "[concat(variables('containerRegistryName'), '.azurecr.io/developer-finder')]",
+    "twilioConnectionName": "twilio"
+  },
+  "resources": [
+    {
+      "type": "microsoft.insights/components",
+      "name": "[variables('applicationInsightsName')]",
+      "apiVersion": "2014-08-01",
+      "location": "East US",
+      "kind": "other",
+      "properties": {
+          "ApplicationId": "[variables('applicationInsightsName')",    
+          "Application_Type": "other"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "sku": {
+          "name": "B1",
+          "tier": "Basic",
+          "size": "B1",
+          "family": "B",
+          "capacity": 1
+      },
+      "kind": "app",
+      "name": "[variables('functionAppServicePlanName')]",
+      "apiVersion": "2016-09-01",
+      "location": "[parameters('nonLinuxWebAppLocation')]",
+      "properties": {
+          "name": "[variables('functionAppServicePlanName')]",
+          "workerTierName": null,
+          "adminSiteName": null,
+          "hostingEnvironmentProfile": null,
+          "perSiteScaling": false,
+          "reserved": false,
+          "targetWorkerCount": 0,
+          "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "2016-01-01",
+      "location": "[parameters('nonLinuxWebAppLocation')]",
+      "kind": "Storage",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "functionapp",
+      "name": "[variables('functionAppName')]",
+      "apiVersion": "2016-03-01",
+      "location": "[parameters('nonLinuxWebAppLocation')]",
+      "properties": {
+          "name": "[variables('functionAppName')]",
+          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('functionAppServicePlanName'))]",
+          "clientAffinityEnabled": false,
+          "siteConfig": {
+            "AlwaysOn": true
+          }
+      },
+      "resources": [
+        {
+          "type": "config",
+          "name": "appsettings",
+          "apiVersion": "2015-08-01",
+          "properties": {
+            "FUNCTIONS_EXTENSION_VERSION": "~1",
+            "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+            "WEBSITE_CONTENTSHARE": "[concat(variables('functionAppName'), substring(uniqueString(resourceGroup().id), 0, 4))]",
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1)]",
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1)]",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-05-01-preview').key1)]",
+            "MS_ApplicationInsightsInstrumentationKey": "[reference(concat('microsoft.insights/components/', variables('applicationInsightsName'))).InstrumentationKey]",
+            "project": "AppServices/FunctionApp"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+            "[resourceId('microsoft.insights/components', variables('applicationInsightsName'))]"
+          ]
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "properties": {
+            "RepoUrl": "[parameters('sourceCodeRepositoryURL')]",
+            "branch": "[parameters('sourceCodeBranch')]",
+            "IsManualIntegration": "parameters('sourceCodeManualIntegration')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites/', variables('functionAppName'))]",
+            "[resourceId('Microsoft.Web/Sites/config', variables('functionAppName'), 'appsettings')]"
+          ]
+        }
+      ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('functionAppServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "sku": {
+        "name": "B1",
+        "tier": "Basic"
+      },
+      "kind": "linux",
+      "name": "[variables('webAppServicePlanName')]",
+      "apiVersion": "2016-09-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+        "name": "[variables('webAppServicePlanName')]",
+        "workerTierName": null,
+        "adminSiteName": null,
+        "hostingEnvironmentProfile": null,
+        "perSiteScaling": false,
+        "reserved": true,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "sku": {
+        "name": "B1",
+        "tier": "Basic"
+      },
+      "kind": "linux",
+      "name": "[variables('chatAppServicePlanName')]",
+      "apiVersion": "2016-09-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+          "name": "[variables('chatAppServicePlanName')]",
+          "workerTierName": null,
+          "adminSiteName": null,
+          "hostingEnvironmentProfile": null,
+          "perSiteScaling": false,
+          "reserved": true,
+          "targetWorkerCount": 0,
+          "targetWorkerSizeId": 0
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('webAppServicePlanName'))]"
+      ]
+    },
+    {        
+      "type": "Microsoft.ContainerRegistry/registries",
+      "name": "[variables('containerRegistryName')]",
+      "apiVersion": "2017-06-01-preview",
+      "sku": {
+          "name": "Managed_Basic",
+          "tier": "Managed"
+      },
+      "location": "westcentralus",
+      "properties": {
+          "adminUserEnabled": true
+      }
+    },
+    {
+      "type": "Microsoft.DBforMySQL/servers",
+      "name": "[variables('mySQLServerName')]",
+      "apiVersion": "2017-04-30-preview",
+      "location": "[variables('location')]",
+      "sku": {
+        "name": "MYSQLB50",
+        "tier": "Basic",
+        "capacity": 50
+      },
+      "properties": {
+        "administratorLogin": "[parameters('databaseAdminLoginName')]",
+        "administratorLoginPassword": "[parameters('databaseAdminLoginPassword')]",
+        "storageMB": 51200,
+        "version": "5.7",
+        "sslEnforcement": "Disabled"
+      },
+      "resources": [
+        {
+          "type": "databases",
+          "name": "[variables('mySQLDatabaseName')]",
+          "apiVersion": "2017-04-30-preview",
+          "properties": {
+            "charset": "latin1",
+            "collation": "latin1_swedish_ci"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.DBforMySQL/servers', variables('mySQLServerName'))]"
+          ]
+        },
+        {
+          "type": "firewallRules",
+          "name": "all",
+          "apiVersion": "2017-04-30-preview",
+          "properties": {
+              "startIpAddress": "0.0.0.0",
+              "endIpAddress": "255.255.255.255"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.DBforMySQL/servers', variables('mySQLServerName'))]"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/servers",
+      "name": "[variables('postgreSQLServerName')]",
+      "apiVersion": "2017-04-30-preview",
+      "location": "[variables('location')]",
+      "sku": {
+          "name": "PGSQLB50",
+          "tier": "Basic",
+          "capacity": 50
+      },
+      "properties": {
+          "administratorLogin": "[parameters('databaseAdminLoginName')]",
+          "administratorLoginPassword": "[parameters('databaseAdminLoginPassword')]",
+          "storageMB": 51200,
+          "version": "9.6",
+          "sslEnforcement": "Disabled",
+          "userVisibleState": "Ready",
+          "fullyQualifiedDomainName": "ruby-chat.postgres.database.azure.com"
+      },
+      "resources": [
+          {
+              "type": "databases",
+              "name": "[variables('postgreSQLDatabaseName')]",
+              "apiVersion": "2017-04-30-preview",
+              "properties": {
+                  "charset": "UTF8",
+                  "collation": "English_United States.1252"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('postgreSQLServerName'))]"
+              ]
+          },
+          {
+            "type": "firewallRules",
+            "name": "all",
+            "apiVersion": "2017-04-30-preview",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "255.255.255.255"
+            },
+            "dependsOn": [
+              "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('postgreSQLServerName'))]"
+            ]
+          }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/connections",
+      "name": "[variables('twilioConnectionName')]",
+      "location": "[variables('location')]",
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "displayName": "[variables('twilioConnectionName')]",
+        "customParameterValues": {},
+        "nonSecretParameterValues": {},
+        "api": {
+          "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twilio')]"
+        },
+        "parameterValues":{  
+          "sid": "[parameters('twilioAccountSID')]",
+          "token": "[parameters('twilioAuthToken')]"
+       }
+      }      
+    },
+    {
+      "type": "Microsoft.Logic/workflows",
+      "name": "[variables('sendSMSLogicAppName')]",
+      "apiVersion": "2016-06-01",
+      "location": "[variables('location')]",
+      "scale": null,
+      "properties": {
+          "definition": {
+              "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                  "$connections": {
+                      "defaultValue": {},
+                      "type": "Object"
+                  }
+              },
+              "triggers": {
+                  "manual": {
+                      "type": "Request",
+                      "kind": "Http",
+                      "inputs": {
+                          "schema": {
+                              "properties": {
+                                  "message": {
+                                      "type": "string"
+                                  },
+                                  "to": {
+                                      "type": "string"
+                                  }
+                              },
+                              "type": "object"
+                          }
+                      }
+                  }
+              },
+              "actions": {
+                  "Response": {
+                      "runAfter": {
+                          "Send_Text_Message_(SMS)": [
+                              "Succeeded"
+                          ]
+                      },
+                      "type": "Response",
+                      "inputs": {
+                          "body": "@body('Send_Text_Message_(SMS)')",
+                          "headers": {
+                              "Content-Type": "application/json"
+                          },
+                          "statusCode": 200
+                      }
+                  },
+                  "Send_Text_Message_(SMS)": {
+                      "runAfter": {},
+                      "type": "ApiConnection",
+                      "inputs": {
+                          "body": {
+                              "body": "@triggerBody()?['message']",
+                              "from": "[parameters('twilioFromPhoneNumber')]",
+                              "to": "@triggerBody()?['to']"
+                          },
+                          "host": {
+                              "connection": {
+                                  "name": "@parameters('$connections')['twilio']['connectionId']"
+                              }
+                          },
+                          "method": "post",
+                          "path": "/Messages.json"
+                      }
+                  }
+              },
+              "outputs": {}
+          },
+          "parameters": {
+              "$connections": {
+                  "value": {
+                      "twilio": {
+                        "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twilio')]",
+                        "connectionId": "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]"
+                      }
+                  }
+              }
+          }
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "app",
+      "name": "[variables('webAppName')]",
+      "apiVersion": "2015-08-01",
+      "location": "[variables('location')]",
+      "properties": {
+        "name": "[variables('webAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webAppServicePlanName'))]"
+      },
+      "resources": [
+        {
+          "type": "config",
+          "name": "appsettings",
+          "apiVersion": "2015-08-01",
+          "properties": {
+            "DOCKER_REGISTRY_SERVER_URL": "[concat('https://', variables('containerRegistryName'), '.azurecr.io')]",
+            "DOCKER_REGISTRY_SERVER_USERNAME": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName')), '2017-03-01').username]",
+            "DOCKER_REGISTRY_SERVER_PASSWORD": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName')), '2017-03-01').passwords[0].value]",
+            "DOCKER_CUSTOM_IMAGE_NAME": "[variables('webAppDockerImage')]",
+            "SOCIAL_AUTH_GITHUB_KEY": "[parameters('oauthGitHubClientId')]",
+            "SOCIAL_AUTH_GITHUB_SECRET": "[parameters('oauthGitHubClientSecret')]",
+            "SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY": "[parameters('oauthLinkedInClientId')]",
+            "SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET": "[parameters('oauthLinkedInClientSecret')]",
+            "MYSQL_HOSTNAME": "[concat(variables('mySQLServerName'), '.mysql.database.azure.com')]",
+            "MYSQL_USERNAME": "[concat(parameters('databaseAdminLoginName'), '@', variables('mySQLServerName'))]",
+            "MYSQL_PASSWORD": "[parameters('databaseAdminLoginPassword')]",
+            "MYSQL_DATABASE": "[variables('mySQLDatabaseName')]",
+            "RUBY_CHAT_URL": "[concat('https://', variables('chatAppName'), '.azurewebsites.net/')]",
+            "FUNCTION_APP_URL": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/')]",
+            "SEND_SMS_LOGIC_APP_URL": "[listCallbackURL(concat(resourceId('Microsoft.Logic/workflows/', variables('sendSMSLogicAppName')), '/triggers/manual'), '2016-06-01').value]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('webAppName'))]",
+            "[resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName'))]",
+            "[resourceId('Microsoft.DBforMySQL/servers', variables('mySQLServerName'))]"
+          ]
+        }
+      ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('webAppServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "kind": "app",
+      "name": "[variables('chatAppName')]",
+      "apiVersion": "2015-08-01",
+      "location": "[variables('location')]",
+      "properties": {
+        "name": "[variables('chatAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('chatAppServicePlanName'))]"
+      },
+      "resources": [
+        {
+          "type": "config",
+          "name": "appsettings",
+          "apiVersion": "2015-08-01",
+          "properties": {
+            "DOCKER_CUSTOM_IMAGE_NAME": "[parameters('rubyChatDockerImage')]",
+            "POSTGRESQL_HOSTNAME": "[concat(variables('postgreSQLServerName'), '.postgres.database.azure.com')]",
+            "POSTGRESQL_USERNAME": "[concat(parameters('databaseAdminLoginName'), '@', variables('postgreSQLServerName'))]",
+            "POSTGRESQL_PASSWORD": "[parameters('databaseAdminLoginPassword')]",
+            "POSTGRESQL_DATABASE": "[variables('postgreSQLDatabaseName')]"
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('chatAppName'))]",
+            "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('postgreSQLServerName'))]"
+          ]
+        }
+      ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('chatAppServicePlanName'))]"
+      ]
+    }
+  ]
+}

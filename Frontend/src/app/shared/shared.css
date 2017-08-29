@@ -1,0 +1,14 @@
+.btn-default{background-color: #007BB6;border: none;color: #FFFFFF;padding: 15px 32px;text-align: center;-webkit-transition-duration: 0.4s; /* Safari */
+transition-duration: 0.4s;margin: 16px 0 !important;text-decoration: none;font-size:16px;cursor:pointer;}
+
+.buttons .btn{display: inline-block;padding: 8px 0px;margin-bottom: 0;font-weight: 300;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;font-weight:600;font-size:16px;width:300px;}
+.buttons {padding: 30px; }
+.buttons > div .btn { margin: 5px 10px; }
+.buttons > div:not(:first-child) { margin-top: 10px;  text-align: center; }
+
+.function {padding:6px 0;}
+.function .bg-img{background-repeat: no-repeat;background-size: 16px 16px;background-position: 4px 2px;padding-left: 30px;}
+.function > div{display: inline-block;}
+.function .chat{background-image:url(/assets/images/chat-black-icon.png); width: 95px;cursor: pointer;}
+.function .friend{background-image:url(/assets/images/check-black-square-icon.png);cursor: pointer;}
+.function .add-friend{background-image:url(/assets/images/add-square-button-icon.png);cursor: pointer;}

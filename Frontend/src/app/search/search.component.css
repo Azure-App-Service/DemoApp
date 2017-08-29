@@ -1,0 +1,55 @@
+a.disabled {background-color:gray;cursor: not-allowed;text-decoration: underline;pointer-events: none;cursor: not-allowed; }
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+.spinner{position: relative;height: 30px;} 
+.spinner:before {content: '';box-sizing: border-box;position: absolute;top: 50%;left: 50%;width: 30px;height: 30px;margin-top: -15px;margin-left: -15px;border-radius: 50%;border: 1px solid #ccc;border-top-color: #07d;animation: spinner .6s linear infinite;}
+
+.search{margin: 0px auto; width: 1200px; text-align: center;padding-top:30px;}
+.search > *{vertical-align: top;}
+.search .filters{width:347px; float: left; background-color: #eee;padding-top:0px;border:1px solid #989BA1;}
+.search .filters > h2{text-align: left;padding-left: 15px;margin-top: 16px;margin-bottom:15px;font-weight: 500;}
+.search .filters ul {list-style: none; padding-left: 11px;margin-top:0; }
+.search .filters li {text-align: left;padding: 5px;margin-top:5px;}
+.search .filters li:not(:first-child){border-top: 0px;}
+.search .filters li:last-child{margin-top:10px;}
+.search .filters li input {width:95%; padding: 2px; height: 24px; border: 1px solid #c0c0c0;margin-top:5px; }
+.search .filters li  input.hireable{display: inline-block;width:15px;vertical-align: middle;margin-right: 5px;}
+.search .filters li select {width:95%; padding: 2px; height: 28px; border: 1px solid #c0c0c0; }
+.search .filters li textarea {width:95%; height: 100px; border: 1px solid #c0c0c0; }
+.search .filters li>h5{margin-bottom:0px;}
+.search .filters li div.hire-opt{display:inline-block;width:24%;}
+.search .filters li div.hire-opt:last-child{width:32%;}
+.search .filters li div.hire-opt > label{vertical-align:middle;}
+/*buttons*/
+.btn-default{background-color: #199ED8;border: none;color: #FFFFFF;padding: 15px 32px;text-align: center;-webkit-transition-duration: 0.4s; /* Safari */
+transition-duration: 0.4s;margin: 16px 0 !important;text-decoration: none;font-size:16px;cursor:pointer;}
+.btn{display: inline-block;padding: 8px 0px;margin-bottom: 0;font-weight: 300;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;font-weight:600;font-size:16px;width:80%;}
+div .btn { margin: 5px 10px; }
+
+.search hr{border-top: 1px solid #92959C;}
+
+.search .result { width:790px; float: right; padding: 0 30px;margin-top: 20px;}
+.search .result > h1{text-align: left;}
+.search .result .header{position:relative;}
+.search .result .header.padding-top{padding-top:20px;}
+.search .result .header h3{position: absolute;top: -35px; font-weight:500;}
+.search .result .searched {text-align:left;}
+.search .result .person{width: 48%; display:inline-block;text-align:left;padding: 15px 5px 15px 5px;}
+.search .result .person .profile{background-image: url(/assets/images/profile-none.png);background-position: 0px 0px;background-size: 117px 117px;background-repeat: no-repeat;width: 117px;height: 117px;display: inline-block;cursor:pointer;}
+.search .result .person  .info{display: inline-block; width: 210px}
+.search .result .person  .info .name{font-weight:600;}
+.search .result .person  .info .position{font-size:15px;margin-top: -10px;width:210px;}
+.search .result .person  .info .position ul{list-style:none;padding-left:0;width:210px;}
+.search .result .person  .info .position li{width:210px;}
+.search .result .person  .info .position li:last-child{font-style:italic;}
+.search .result .person  .info .function {padding:6px 0;margin-top:-15px;}
+.search .result .person  .info .function .bg-img{background-repeat: no-repeat;background-size: 16px 16px;background-position: 4px 2px;padding-left: 30px;}
+.search .result .person  .info .function > div{display: inline-block;}
+.search .result .person  .info .function .chat{background-image:url(/assets/images/chat-black-icon.png); width: 95px;cursor: pointer;}
+.search .result .person  .info .function .friend{background-image:url(/assets/images/check-black-square-icon.png);cursor: pointer;}
+.search .result .person  .info .function .add-friend{background-image:url(/assets/images/add-square-button-icon.png);cursor: pointer;}
+.search .result > h3{text-align: left;font-weight:500;}
+.search .result > div.tip{text-align: left;}
+
+.clear { clear: both; }
