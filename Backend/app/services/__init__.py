@@ -1,1 +1,1 @@
-from . import letschatservice
+from . import logger_service

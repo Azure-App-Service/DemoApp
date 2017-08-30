@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'profile',  component: ProfileComponent },
   { path: 'profile/:id', component: ProfileComponent },
   { path: 'connect',  component: ConnectSocialComponent },
+  { path: 'connect/:redirect',  component: ConnectSocialComponent },
   { path: 'search',  component: SearchComponent },
   { path: 'chat/:id',  component: ChatComponent },
   { path: 'chat/:id/:source',  component: ChatComponent },

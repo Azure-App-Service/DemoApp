@@ -1,5 +1,5 @@
 import { Component, OnInit,Inject  } from '@angular/core';
-import { Router} from '@angular/router';
+import { Router,ActivatedRoute} from '@angular/router';
 import { Constants } from '../util/constants';
 import {ConnectedAccount} from '../shared/connectedAccount';
 import { AuthHelper } from "../util/authHelper";
@@ -21,10 +21,12 @@ export class ConnectSocialComponent implements OnInit {
 
   hasLinkedInConnected = false;
   hasGithubConnected = false;
+  isAutoRedirect = false;
   profile:Profile;
   constructor(private connectService: ConnectService,
               private profileService:ProfileService,
               private router: Router,
+              private activatedRouter:ActivatedRoute,
               @Inject('auth') private auth: AuthHelper){}
   ngOnInit(): void {
     if(!this.auth.isLogin()){
@@ -36,14 +38,24 @@ export class ConnectSocialComponent implements OnInit {
   }
 
   init(){
-    Cookie.set(Constants.ConnectKey,true.toString());
-    this.profileService.getCurrentUserProfile()
+    this.initAutoRedirect(()=>{
+        Cookie.set(Constants.ConnectKey,true.toString());
+        this.profileService.getCurrentUserProfile()
                        .subscribe(
                           profile=>{
                             this.profile = profile;
                             this.checkConnectedAccount();
                           }
-                       );
+                       ); 
+    });
+  }
+
+  initAutoRedirect(callback){
+      this.activatedRouter.params.subscribe(params => {
+            this.isAutoRedirect = (params['redirect']=="1");
+            if(callback)
+                callback();
+    });
   }
 
   checkConnectedAccount():void{
@@ -55,6 +67,8 @@ export class ConnectSocialComponent implements OnInit {
                                 this.hasGithubConnected = true;
                               if(CommonUtil.isIgnoreCaseEqual(connected.provider,Constants.SocialProvider.LinkedIn))
                                 this.hasLinkedInConnected = true;
+                              if(this.isAutoRedirect == false)
+                                return;
                               if(this.hasGithubConnected && this.hasLinkedInConnected){
                                     if(this.profile!=null && this.profile.phone_number && this.profile.skills)
                                       this.router.navigate(['search']);

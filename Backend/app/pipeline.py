@@ -45,7 +45,7 @@ def create_or_update_profile(strategy, details, response, user=None, *args, **kw
         site_standard_profile_request = response.get('siteStandardProfileRequest')
         if site_standard_profile_request:
             profile.linkedin_standard_profile_url = site_standard_profile_request.get('url')
-        profile.linkedin_public_profile_Url = response.get('publicProfileUrl')
+        profile.linkedin_public_profile_url = response.get('publicProfileUrl')
         # positions
         Position.delete().where(Position.profile == user.id).execute()
         positions = response.get('positions')

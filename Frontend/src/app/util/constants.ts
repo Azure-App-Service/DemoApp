@@ -51,7 +51,7 @@ export class Constants {
         public static readonly friendsUrl= '/api/friends';
         public static readonly smsUrl= '/api/sms';
         public static readonly chatMessageUrl= '/api/messages';
-        public static readonly messageSummaryUrl= '/api/messageSummaries';
+        public static readonly messageSummaryUrl= '/api/messages/summary';
         public static readonly chatSMSUrl= '/api/sms';
     }
 }

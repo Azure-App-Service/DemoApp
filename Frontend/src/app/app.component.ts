@@ -42,7 +42,7 @@ export class AppComponent implements OnInit{
 
     let connectAccessed= Cookie.get(Constants.ConnectKey);
     if(connectAccessed!='true'){
-      this.router.navigate(['connect']);
+      this.router.navigate(['connect',1]);
       return;
     }
     this.connectService.getConnectedAccounts()

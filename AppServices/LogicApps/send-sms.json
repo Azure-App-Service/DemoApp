@@ -20,7 +20,7 @@
                     "statusCode": 200
                 },
                 "runAfter": {
-                    "Send_Text_Message_(SMS)": [
+                    "TrackCustomEvent_Completed": [
                         "Succeeded"
                     ]
                 },
@@ -30,7 +30,7 @@
                 "inputs": {
                     "body": {
                         "body": "@triggerBody()?['message']",
-                        "from": "+185********",
+                        "from": "+185*******",
                         "to": "@triggerBody()?['to']"
                     },
                     "host": {
@@ -41,8 +41,54 @@
                     "method": "post",
                     "path": "/Messages.json"
                 },
-                "runAfter": {},
+                "runAfter": {
+                    "TrackCustomEvent_Started": [
+                        "Succeeded"
+                    ]
+                },
                 "type": "ApiConnection"
+            },
+            "TrackCustomEvent_Completed": {
+                "inputs": {
+                    "body": {
+                        "EventName": "Logic App Status",
+                        "Metrics": {
+                            "Logic App": 0
+                        },
+                        "Properties": {
+                            "Description": "Send-sms logic app completed",
+                            "LogType": "Status Log"
+                        }
+                    },
+                    "function": {
+                        "id": "/subscriptions/3b7912c3-ad06-426e-8627-41912372774b/resourceGroups/AzureLinuxWebAppQA/providers/Microsoft.Web/sites/developer-finder-qa-function/functions/TrackCustomEvent"
+                    }
+                },
+                "runAfter": {
+                    "Send_Text_Message_(SMS)": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Function"
+            },
+            "TrackCustomEvent_Started": {
+                "inputs": {
+                    "body": {
+                        "EventName": "Logic App Status",
+                        "Metrics": {
+                            "Logic App": 0
+                        },
+                        "Properties": {
+                            "Description": "Send-sms logic app started",
+                            "LogType": "Status Log"
+                        }
+                    },
+                    "function": {
+                        "id": "/subscriptions/3b7912c3-ad06-426e-8627-41912372774b/resourceGroups/AzureLinuxWebAppQA/providers/Microsoft.Web/sites/developer-finder-qa-function/functions/TrackCustomEvent"
+                    }
+                },
+                "runAfter": {},
+                "type": "Function"
             }
         },
         "contentVersion": "1.0.0.0",

@@ -28,4 +28,4 @@ class Profile(BaseModel):
     num_connections = IntegerField(null=True)
     num_connections_capped = BooleanField(null=True)
     linkedin_standard_profile_url = CharField(null=True)
-    linkedin_public_profile_Url = CharField(null=True)
+    linkedin_public_profile_url = CharField(null=True)

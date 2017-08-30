@@ -7,7 +7,7 @@ class Message(object):
         self.content = content
         self.created = created
 
-    def toJson(self):
+    def to_json(self):
         return {
             'id': str(self.id), 
             'fromUser': str(self.fromUser),

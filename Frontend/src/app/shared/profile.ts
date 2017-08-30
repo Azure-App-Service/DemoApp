@@ -2,7 +2,7 @@ export class Profile{
     id?:number;
     github_profile_url?:string;
     linkedinStandardProfileUrl?:string;
-    linkedin_public_profile_Url?:string;
+    linkedin_public_profile_url?:string;
     avatar_url?:string;
     bio?:string;
     company?:string;

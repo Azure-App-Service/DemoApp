@@ -4,11 +4,15 @@ from flask import request
 from flask_login import login_required, current_user
 from flask_restful import Resource
 from playhouse.shortcuts import model_to_dict
+from app.services.logger_service import logger
 
 class MeResource(Resource):
     
+    api_url = '/api/me'
+    
     @login_required
     def get(self):
+        logger.log_python_api_get(MeResource.api_url)
         profile, created = Profile.get_or_create(id=current_user.id) 
         profile_dict = model_to_dict(profile)
         profile_dict["positions"] = [p.title for p in profile.positions]
@@ -16,6 +20,7 @@ class MeResource(Resource):
 
     @login_required
     def post(self):
+        logger.log_python_api_post(MeResource.api_url)
         # parser = reqparse.RequestParser()
         # parser.add_argument('phone_number', required=True, help="Phone number cannot be blank!")
         # args = parser.parse_args()
@@ -30,4 +35,4 @@ class MeResource(Resource):
 
         return model_to_dict(profile)
 
-api.add_resource(MeResource, '/api/me')
+api.add_resource(MeResource,MeResource.api_url)

@@ -11,10 +11,12 @@ The entire application is packaged inside Docker containers and deployed to Micr
 **Table of contents**
 
 * [Architecture](#architecture)
+  * [Containers](#Containers)
   * [Web App](#web-app)
   * [Chat App](#chat-app)
   * [Azure Services](#azure-services)
   * [Databases](#databases)
+  * [Application Insights](#application-insights)
 * [Deployment](#deployment)
   * [Choose a name for the app](#choose-a-name-for-the-app)
   * [Register OAuth applications](#register-oauth-applications)
@@ -34,6 +36,14 @@ The following diagram illustrates the overall system architecture.
 
 The main components of the application are described in subsequent sections in this document.
 
+### Containers
+
+2 Docker images implement the system, each runs in its own container and they communicate via HTTP/HTTPS.
+
+The following diagram illustrates the containers.
+
+![](Images/containers.jpg)
+
 ### Web App
 
 #### Back-end 
@@ -44,7 +54,7 @@ The back-end is a Python (3.6) App.
 
 * Uses the [Python Social Auth](https://python-social-auth.readthedocs.io/en/latest/) library to enable GitHub and LinkedIn accounts to login and returns user profile information from these systems. 
 
-   The following path are exposed for authentication:
+   The following paths are exposed for authentication:
 
    | Path                                 | Description                              |
    | ------------------------------------ | ---------------------------------------- |
@@ -79,12 +89,12 @@ The front-end is an AuglarJS App which provides the following pages:
 
 | Page       | Path            | Description                              |
 | ---------- | --------------- | ---------------------------------------- |
-| Login      | /login          | Allow users to login with GitHub or LinkedIn account |
-| Connect    | /connect        | Allow current user to connect to the other account |
-| My Profile | /profile        | Allow current user to view and edit his/her profile |
-| Search     | /search         | Allow current user to search friends, add friend, and start a chat |
-| Profile    | /profile/*<id>* | Allow current user to view other devs' profile |
-| Chat       | /chat/*<id>*    | Allow current user to chat with a dev or a friend |
+| Login      | /login          | Allows users to login with GitHub or LinkedIn account |
+| Connect    | /connect        | Allows current user to connect to the other account |
+| My Profile | /profile        | Allows current user to view and edit his/her profile |
+| Search     | /search         | Allows current user to search friends, add friend, and start a chat |
+| Profile    | /profile/*<id>* | Allows current user to view other devs' profile |
+| Chat       | /chat/*<id>*    | Allows current user to chat with a dev or a friend |
 
 #### Nginx 
 
@@ -116,8 +126,6 @@ Azure Services are also used to implement the application. The following service
   * Logs custom metrics to Application Insights.
 2. Logic App
   * Sends SMS text messages to users.
-3. Application Insights
-  * Store custom metrics for the application.
 
 ### Databases
 
@@ -131,46 +139,67 @@ The MySQL Database is used by the Web App. It contains the following tables.
 | usersocialauth | Stores users' connected social account info, like provider and uid<br>It contains a foreign key column user_id referencing the primary key column of the user table |
 | profile        | Stores users' profiles                   |
 | position       | Stores users' positions<br>It contains a foreign key column profile_id referencing the primary key column of the profile table. |
-| friend         | Stores friends relationship <br>Its 2 column user_id and friend_id are foreign keys referencing the primary key column of the user table |
+| friend         | Stores friends relationship <br>Its 2 columns, user_id and friend_id, are foreign keys referencing the primary key column of the user table |
 
-The **profile** table contains several columns which could be divided into 5 groups:
+>**Note:** In a true production environment, the data in the usersocialauth table would most likely be stored in a separate database to make the solution more secure.  In this sample, it is stored in the same database to simplify the solution and the deployment process.
+
+The **profile** table contains several columns which are divided into 5 groups:
 
 * Primary key:
-  * id: matches the id column value in the user table.
+  * id: matches the id column value in the user table
 * Values managed by My Profile page:
-  * phone_number: user’s phone number.
-  * skills: comma seperated string, for example: *c#, Python, Ruby*.
-
-
-* Values are retrieved from GitHub and LinkedIn account:
-  * company: user’s current company.
-  * location: user's location.
-  * name: user display name.
+  * phone_number: user’s phone number
+  * skills: comma separated string, for example: *c#, Python, Ruby*
+* Values  retrieved from GitHub and LinkedIn accounts:
+  * company: user’s current company
+  * location: user's location
+  * name: user display name
 * Values are retrieved from GitHub only:
-  * github_profile_url: the URL to user’s GitHub profile page.
-  * blog_url: the URL to user's blog.
-  * hireable: boolean indicating if the user is hireable.
-  * bio: user's biography.
-  * public_repos: the number of public repos.
-  * public_gists: the number of public gists.
-  * followers: the number of followers.
-  * following: the number of users the user is following.
-  * avatar_url: the URL to the user’s avatar.
+  * github_profile_url: the URL to user’s GitHub profile page
+  * blog_url: the URL to user's blog
+  * hireable: boolean indicating if the user is hireable
+  * bio: user's biography
+  * public_repos: the number of public repos
+  * public_gists: the number of public gists
+  * followers: the number of followers
+  * following: the number of users the user is following
+  * avatar_url: the URL to the user’s avatar
 * Values are retrieved from LinkedIn only:
-  * industry: The industry the member belongs to.
+  * industry: The industry the member belongs to
   * num_connections: the number of LinkedIn connections the member has, capped at 500.  See 'num-connections-capped' to determine if the value returned has been capped.
-  * num_connections_capped: returns 'true' if the member's 'num-connections' value has been capped at 500', or 'false' if 'num-connections' represents the user's true value.
+  * num_connections_capped: returns 'true' if the member's 'num-connections' value has been capped at 500', or 'false' if 'num-connections' represents the user's true value
   * linkedin_standard_profile_url: the URL to the member's authenticated profile on LinkedIn.  You must be logged into LinkedIn to view this URL.
-  * linkedin_public_profile_url: the URL to the member's public profile on LinkedIn.
+  * linkedin_public_profile_url: the URL to the member's public profile on LinkedIn
 
 #### PostgreSQL Database
 
-The PostgreSQL database is used by the Chat App. It is very simple and only contains 2 table:
+The PostgreSQL database is used by the Chat App. It is very simple and only contains 2 tables:
 
 | Table                | Description                         |
 | -------------------- | ----------------------------------- |
 | messages             | Stores all the messages             |
 | message_read_records | Records users' last read message id |
+
+### Application Insights
+
+Throughout the application, custom events are logged to Application Insights.
+
+The following table describes the custom events logged to Application Insights at a high level.
+
+| Source          | Triggers                                 |
+| --------------- | ---------------------------------------- |
+| Python Web App  | Python REST API, Function, and Logic App Calls |
+| Python REST API | Python REST API, Function, and Logic App Calls |
+| Logic App       | Start, Events Taking Place In Logic App, Complete |
+
+This image shows custom events logged to Application Insights.
+
+![](Images/application-insights-1.jpg)
+
+The following image shows the detail of a custom event.  In this example, the /api/messages/summary Python REST API was successfully invoked.
+
+![](Images/application-insights-2.jpg)
+
 ## Deployment
 
 ### Choose a name for the app
@@ -220,14 +249,14 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
      >
      > 	https://developer-finder-contoso.azurewebsites.net/complete/github/
 
-4. Click **Register application**.
-5. Copy aside the **ClientID** and **Client Secret**. 
+4. Click **Register application**
+5. Copy aside the **ClientID** and **Client Secret**
 
-   > Note: These values will be used for the **OAuth GitHub Client Id** and **OAuth GitHub client Secret** ARM template parameters.
+   > **Note:** These values will be used for the **OAuth GitHub Client Id** and **OAuth GitHub client Secret** ARM template parameters.
 
 #### Register LinkedIn OAuth application
 
-1. Sign into LinkedIn.
+1. Sign into LinkedIn
 
 2. Open https://www.linkedin.com/developer/apps/new
 
@@ -248,7 +277,7 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
       > https://developer-finder-contoso.azurewebsites.net
       > ```
 
-4. Input the other required fields, then click **Submit**.
+4. Input the other required fields, then click **Submit**
 
 5. Add the OAuth 2 Authorized Redirect URL: 
 
@@ -260,11 +289,11 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
    >
    > 	https://developer-finder-contoso.azurewebsites.net/complete/linkedin-oauth2/
 
-6. Click **Update**.
+6. Click **Update**
 
-7. Copy aside the **ClientID** and **Client Secret**. 
+7. Copy aside the **ClientID** and **Client Secret**
 
-   > Note: These values will be used for the **OAuth LinkedIn Client Id** and **OAuth LinkedIn Client Secret** ARM template parameters.
+   > **Note:** These values will be used for the **OAuth LinkedIn Client Id** and **OAuth LinkedIn Client Secret** ARM template parameters.
 
 ### GitHub Authorization
 
@@ -282,7 +311,7 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
 
    - Select the following checkboxes (your selections should match the screenshot below):
 
-     - repo (all) -> repo:status, repo_deployment, public_repo
+     - repo -> repo:status, repo_deployment, public_repo
 
      - admin:repo_hook -> read:repo_hook
 
@@ -290,65 +319,67 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
 
 2. Add the GitHub Token to Azure in the Azure Resource Explorer
 
-   * Open https://resources.azure.com/providers/Microsoft.Web/sourcecontrols/GitHub in your web browser.
+   * Open https://resources.azure.com/providers/Microsoft.Web/sourcecontrols/GitHub in your web browser
 
-   * Log in with your Azure account.
+   * Log in with your Azure account
 
-   * Selected the correct Azure subscription.
+   * Selected the correct Azure subscription
 
-   * Select **Read/Write** mode.
+   * Select **Read/Write** mode
 
-   * Click **Edit**.
+   * Click **Edit**
 
-   * Paste the token into the **token parameter**.
+   * Paste the token into the **token parameter**
 
      ![](Images/update-github-token-in-azure-resource-explorer.png)
 
-   * Click **PUT**.
+   * Click **PUT**
 
-### [Optional] Register a Twilio account to send SMS 
+### [OPTIONAL STEP] Register a Twilio account to send SMS 
 
-When a chat started, the app will send SMS to notify the other side. In order to acheive this, we will create a trail Twillo. 
+When a chat is started between two users in the application, the app will send an SMS to notify the user the message was sent to them. 
 
-But we need to verify other others' phone numbers in advance due to the restrictions of trial account. You can skip this section.
+This app uses a Twilio trial account to send SMS.
 
-#### Create a trial Twilio account and configure
+If you wish to enable the SMS capabilities in the application you must create a Twilio trial account and register and verify a phone number to send SMS.
 
-1. Register a trail account:
+#### Create and configure a Twilio trial account
+
+1. Register a trial account
 
    * Open https://www.twilio.com/, then click **Get a free API key**. 
    * You will be redirected to **Sign up for free page**. Fill in the form, then click **Get Started**.
-   * Twilio will show a page verify you‘re a human. Finish it.
+   * Twilio will show a page verify you're a human. Finish it.
 
-2. Create a project:
+2. Create a project
 
-   After the human verification, you will be redirected to a page to let you create a project.
+   After the human verification is complete, you will be redirected to a page to let you create a project.
 
-   * Input a name, for example: Developer Finder, then Click **Create Project**.
+   * Input a name, for example: **Developer Finder**, then click **Create Project**
 
-   * After the project created, copy aside the values of **ACCOUNT ID** and **AUTH TOKEN**.![](Images/twilio-api-credentials.png)
+   * After the project is created, copy aside the **ACCOUNT ID** and **AUTH TOKEN** values ![](Images/twilio-api-credentials.png)
 
-     > Note: These 2 values will be used for the **Twilio Account SID** and **Twilio Auth Token** ARM template parameters.
+     > **Note:** These 2 values will be used for the **Twilio Account SID** and **Twilio Auth Token** ARM template parameters.
 
-3. Get a phone number.
+3. Get a phone number
 
-   * Click the **Manage Numbers** under the **Phone Numbers** section.
+   * In the **Phone Numbers** section, click **Manage Numbers** 
+   * Twilio will redirect you to the **Phone Numbers Dashboard**.
+   * Click **Get Started**
+   * Click **Get you first Twilio phone number**
 
-   * Twilio will redirect you to **Phone Numbers Dashboard**. Click **Get Start**.
-
-   * Click **Get you first Twilio phone number**. 
-
-     Twilio will pre-select a phone number. Let use it. Click **Choose this number**.
+     > **Note:** Twilio will pre-select a phone number.  Use the number it gives you.
+   * Click **Choose this number**
 
      ![](Images/twilio-phone-number.png)
 
-     Copy aside the phone number.
+   * Copy aside the phone number.
 
-     > Note: These phone number will be used for the **Twilio From Phone Number** ARM template parameter.
+     > **Note:** This phone number will be used for the **Twilio From Phone Number** ARM template parameter.
 
 #### Verify a phone number
 
-1. Click **Verified Caller IDs** on the **Phone Numbers page**.
+1. Click **Verified Caller IDs** on the **Phone Numbers page**
 
    ![](Images/twilio-verified-caller-ids.png)
 
@@ -356,7 +387,7 @@ But we need to verify other others' phone numbers in advance due to the restrict
 
    ![](Images/twilio-verify-a-phone-number.png)
 
-   Follow the instructions to verify the phone number.
+3. Follow the instructions to verify the phone number.
 
 ### Deploy the Azure Components
 
@@ -425,7 +456,7 @@ But we need to verify other others' phone numbers in advance due to the restrict
 
    * Ruby Chat Docker Image
 
-   TODO: Need to add the path to this image.
+   **TODO: Need to add the path to this image.**
 
    * Source Code Repository URL:
 
@@ -434,6 +465,7 @@ But we need to verify other others' phone numbers in advance due to the restrict
 4. Check **I agree to the terms and conditions stated above**.
 
 5. Click **Purchase**.
+
 6. Wait until the ARM template deployment process completes.
 
 ### Set up CI/CD
@@ -442,17 +474,17 @@ But we need to verify other others' phone numbers in advance due to the restrict
 
    ![](Images/web-app.png)
 
-2. Click **Continous Delivery**, then click **Configure**.
+2. Click **Continuous Delivery**, then click **Configure**
 
    ![](Images/web-app-cd.png)
 
-3. Click **Choose container registry**, the pre-configured private registry will be loaded.
+3. Click **Choose container registry**, the pre-configured private registry will be loaded
 
    ![](Images/configure-cd-01.png)
 
-4. Click **Save** (the right one).
+4. Click **OK** (the right one)
 
-5. Click **Configure continuous delivery**:
+5. Click **Configure continuous delivery**
 
    ![](Images/configure-cd-02.png)
 
@@ -461,20 +493,19 @@ But we need to verify other others' phone numbers in advance due to the restrict
    * Branch: choose **master**
    * Dockerfile path: change it to **Dockerfile**
 
-6. Click **Save **(the right one).
+6. Click **OK** (the right one)
 
-7. Click **Select a Team Service account**:
+7. Click **Select a Team Service account**
 
    ![](Images/configure-cd-03.png)
 
-   * Create a new account or using an existing one.
+   * Create a new account or using an existing one
    * Create a new project or using an existing one.
+8. Click **OK** (the right one)
 
-8. Click **Save** (the right one).
+9. Click **OK**.
 
-9. Click **Save**. 
-
-   > Note: It takes a few minutes to finish:
+   > **Note:** It takes a few minutes to finish:
    >
    > ![](Images/configure-cd-done.png)
 
@@ -482,7 +513,7 @@ But we need to verify other others' phone numbers in advance due to the restrict
 
 Open the http**s**://**developer-finder-[suffix]**.azurewebsites.net web app.
 
-> Note: 
+> **Note:** 
 >
 > 1. Make sure you use http**s** instead of http.
 > 2. Make sure you replace the [suffix] placeholder with the value you have used throughout the deployment process.
@@ -491,13 +522,33 @@ You will see the login page:
 
 ![](Images/web-app-login.png)
 
-> Note: If you get a "502 Bad Gateway" error, please wait for a few minutes and try again. 
+> **Note:** If you get a "502 Bad Gateway" error, please wait for a few minutes and try again. 
 
 ## Demo scenario overview and flow
 
-See the [Demo Script](Demo Script.pptx) slide deck.
+See the [Demo Script](Demo%20Script.pptx) slide deck.
 
 ## Running the demo
 
-Follow the steps in [Demo Script](Demo Script.pptx) slide deck.
+Follow the steps in [Demo Script](Demo%20Script.pptx) slide deck.
 
+## Contributors ##
+| Roles                      | Author(s)                                |
+| -------------------------- | ---------------------------------------- |
+| Project Lead / Architect   | Todd Baginski (Microsoft MVP, Canviz) @tbag |
+| Architect / Developer Lead | Tyler Lu (Canviz) @TylerLu               |
+| Developer                  | Albert Xie (Canviz)                      |
+| Developer                  | Hubert Sui (Canviz)                      |
+| Design                     | Justin So (Canviz)                       |
+| Testing                    | Cindy Yan (Canviz)                       |
+| Sponsor / Support          | Ahmed Elnaby (Microsoft)                 |
+| Sponsor / Support          | Stella Lin (Microsoft)                   |
+
+## Version history ##
+
+| Version | Date            | Comments        |
+| ------- | --------------- | --------------- |
+| 1.0     | August 31, 2017 | Initial release |
+
+## Disclaimer ##
+**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**

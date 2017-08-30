@@ -22,11 +22,7 @@ def syncdb():
         Friend,
         Profile,
         Position,
-        FlaskStorage.user,
-        FlaskStorage.nonce,
-        FlaskStorage.association,
-        FlaskStorage.code,
-        FlaskStorage.partial
+        FlaskStorage.user
     ]
     for model in models:
         model.create_table(True)

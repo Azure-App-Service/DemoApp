@@ -14,7 +14,7 @@ export class CommonUtil{
         var year = date.getFullYear();
         var hour = date.getHours();
         var minutes = date.getMinutes();
-        return year + '-' + (monthIndex+1).toString() + '-'+day + ' ' + hour + ':' + minutes;
+        return year + '-' + (monthIndex+1).toString() + '-'+day + ' ' + hour + ':' + (minutes >= 10?minutes.toString():'0'+minutes.toString());
     }
 
 }
