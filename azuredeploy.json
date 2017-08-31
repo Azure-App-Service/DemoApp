@@ -88,7 +88,7 @@
     },
     "rubyChatDockerImage": {
       "type": "string",
-      "defaultValue": "tylerlu/ruby-chat",
+      "defaultValue": "appsvc/demoapp-rubychat",
       "metadata": {
         "description": ""
       }
@@ -462,7 +462,7 @@
               "actions": {
                   "Response": {
                       "runAfter": {
-                          "Send_Text_Message_(SMS)": [
+                          "TrackCustomEvent_Completed": [
                               "Succeeded"
                           ]
                       },
@@ -476,7 +476,11 @@
                       }
                   },
                   "Send_Text_Message_(SMS)": {
-                      "runAfter": {},
+                      "runAfter": {
+                          "TrackCustomEvent_Started": [
+                              "Succeeded"
+                          ]
+                      },
                       "type": "ApiConnection",
                       "inputs": {
                           "body": {
@@ -492,23 +496,66 @@
                           "method": "post",
                           "path": "/Messages.json"
                       }
+                  },
+                  "TrackCustomEvent_Completed": {
+                      "runAfter": {
+                          "Send_Text_Message_(SMS)": [
+                              "Succeeded"
+                          ]
+                      },
+                      "type": "Function",
+                      "inputs": {
+                          "body": {
+                              "EventName": "Logic App Status",
+                              "Metrics": {
+                                  "Logic App": 0
+                              },
+                              "Properties": {
+                                  "Description": "[concat(variables('sendSMSLogicAppName'),'Send-sms logic app completed')]",
+                                  "LogType": "Status Log"
+                              }
+                          },
+                          "function": {
+                              "id": "[concat(resourceId('Microsoft.Web/sites', variables('functionAppName')), '/functions/TrackCustomEvent')]"
+                          }
+                      }
+                  },
+                  "TrackCustomEvent_Started": {
+                      "runAfter": {},
+                      "type": "Function",
+                      "inputs": {
+                          "body": {
+                              "EventName": "Logic App Status",
+                              "Metrics": {
+                                  "Logic App": 0
+                              },
+                              "Properties": {
+                                  "Description": "[concat(variables('sendSMSLogicAppName'),'Send-sms logic app started')]",
+                                  "LogType": "Status Log"
+                              }
+                          },
+                          "function": {
+                              "id": "[concat(resourceId('Microsoft.Web/sites', variables('functionAppName')), '/functions/TrackCustomEvent')]"
+                          }
+                      }
                   }
               },
               "outputs": {}
           },
           "parameters": {
-              "$connections": {
-                  "value": {
-                      "twilio": {
-                        "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twilio')]",
-                        "connectionId": "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]"
-                      }
-                  }
-              }
-          }
+            "$connections": {
+                "value": {
+                    "twilio": {
+                      "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/twilio')]",
+                      "connectionId": "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]"
+                    }
+                }
+            }
+        }
       },
       "dependsOn": [
-          "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]"
+          "[resourceId('Microsoft.Web/connections', variables('twilioConnectionName'))]",
+          "[resourceId('Microsoft.Web/Sites/sourcecontrols', variables('functionAppName'), 'web')]"
       ]
     },
     {
@@ -540,7 +587,7 @@
             "MYSQL_PASSWORD": "[parameters('databaseAdminLoginPassword')]",
             "MYSQL_DATABASE": "[variables('mySQLDatabaseName')]",
             "RUBY_CHAT_URL": "[concat('https://', variables('chatAppName'), '.azurewebsites.net/')]",
-            "FUNCTION_APP_URL": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/')]",
+            "TRACK_CUSTOM_EVENT_FUNCTION_URL": "",
             "SEND_SMS_LOGIC_APP_URL": "[listCallbackURL(concat(resourceId('Microsoft.Logic/workflows/', variables('sendSMSLogicAppName')), '/triggers/manual'), '2016-06-01').value]"
           },
           "dependsOn": [

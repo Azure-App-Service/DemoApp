@@ -1,7 +1,7 @@
 <div *ngIf='!isLoginPage' class='header non-login'>
   <h1 class='title'>
-    <div class="search-icon"></div>
-    <div class="content">{{title}}</div>
+    <div class="search-icon" (click)="goHome()"></div>
+    <div class="content"  (click)="goHome()">{{title}}</div>
     <div class="notification-logout">
         <div class="notification" [ngClass]="notifications.length>0 ? 'count' : ''" (click)="showOrHideNotification($event)">
             <div class="num"  [hidden]="notifications.length==0">{{notificationsSummaryCount}}</div>
@@ -16,14 +16,13 @@
             </div>
         </div>
         <select  (change)="logout($event.target.value)">
-            <option value='{{logoutDefault}}'>Select to logout</option>
+            <option value='{{logoutDefault}}'>Logout Options</option>
             <option value='{{logoutUrl}}'>Logout</option>
-            <option value='{{logoutClearUrl}}'>Logout and clear data</option>
+            <option value='{{logoutClearUrl}}'>Logout and clear account data</option>
         </select>
-    </div>
-    
-  </h1>
-  <h1 class='banner'>
+    </div>    
+    </h1>
+    <!-- <h1 class='banner'>
         <div class="content">
             {{banner}}
         </div>
@@ -31,7 +30,7 @@
         <div class="button">
             <a class="btn btn-default"  href="{{learnMoreUrl}}">Learn more</a>
         </div>
-    </h1>
+    </h1> -->
 </div>
 <div *ngIf='isLoginPage' class='header login'>
     <h1 class='title'>
@@ -43,7 +42,7 @@
             <div class="title-bottom">{{titleBottom}}</div>
        </div>
     </h1>
-    <h1 class='banner'>
+    <!-- <h1 class='banner'>
         <div class="content">
             {{banner}}
         </div>
@@ -51,5 +50,5 @@
         <div class="button">
             <a class="btn btn-default"  href="{{learnMoreUrl}}">Learn more</a>
         </div>
-    </h1>
+    </h1> -->
 </div>

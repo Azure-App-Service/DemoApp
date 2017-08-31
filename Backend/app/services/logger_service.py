@@ -18,8 +18,7 @@ class LoggerService(object):
         return self.log_api(APIName + " - post",'Python App')
 
     def log_api(self,APIName,environment):
-        '''
-        requests.post(settings.Logger_Function_APP_URL,json={
+        requests.post(settings.TRACK_CUSTOM_EVENT_FUNCTION_URL,json={
             'EventName':'Python REST API Status',
             'Properties':{
                 'Description':'{0} REST API invoked - {1} invoked'.format(environment,APIName),
@@ -28,7 +27,5 @@ class LoggerService(object):
                 'Status':'Success'
             }
         })
-        '''
-        pass
 
 logger = LoggerService()

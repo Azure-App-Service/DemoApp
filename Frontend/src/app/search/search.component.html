@@ -51,7 +51,7 @@
             <div class="person" *ngFor="let friend of suggestedFriends">
                 <div class="profile" (click)="viewProfile(friend.friendProfile.id)" [ngStyle]="{'background-image': 'url(' + friend.friendProfile.avatar_url + ')'}"></div>
                 <div class="info">
-                    <div class="name">
+                    <div class="name"  (click)="viewProfile(friend.friendProfile.id)">
                         {{friend.friendProfile?.name}}
                     </div>
                     <div class="position">
@@ -81,20 +81,20 @@
                 </div>
             </div>
             <div class="tip"  [hidden]="hasCompleteSuggested == false || (suggestedFriends.length > 0)">
-                None suggested friend could be found.
+                No suggested friends were found.
             </div>
             <hr/>
         </div>
         <h3>Search Results</h3>
         <div class="tip"  [hidden]="hasSearched">
-            Please enter your search criteria to perform a search.
+            Please enter your search criteria and click Search.
         </div>
         <div class="searched" [hidden]="!hasSearched">
             <div class="spinner"  [hidden]="!ifShowSearchSpinner"></div>
             <div class="person"  *ngFor="let friend of searchedFriends">
                 <div class="profile" (click)="viewProfile(friend.friendProfile.id)" [ngStyle]="{'background-image': 'url(' + friend.friendProfile.avatar_url + ')'}"></div>
                 <div class="info">
-                    <div class="name">
+                    <div class="name" (click)="viewProfile(friend.friendProfile.id)"  >
                         {{friend.friendProfile?.name}}
                     </div>
                     <div class="position">

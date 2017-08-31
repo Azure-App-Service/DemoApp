@@ -69,6 +69,5 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 RUBY_CHAT_URL = os.environ.get("RUBY_CHAT_URL")
-FUNCTION_APP_URL = os.environ.get("FUNCTION_APP_URL")
+TRACK_CUSTOM_EVENT_FUNCTION_URL = os.environ.get("TRACK_CUSTOM_EVENT_FUNCTION_URL")
 SEND_SMS_LOGIC_APP_URL = os.environ.get("SEND_SMS_LOGIC_APP_URL")
-Logger_Function_APP_URL = os.environ.get("Logger_Function_APP_URL")

@@ -77,4 +77,8 @@ export class HeaderComponent implements OnInit {
         location.href = logoutArgs;
     }
 
+    goHome(){
+        location.href = "/";
+    }
+
 }

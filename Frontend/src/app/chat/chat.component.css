@@ -15,8 +15,8 @@
 .main ul li > div{text-align: left;}
 .main ul li > div.top{padding-right:30px;padding-bottom: 5px;}
 .main ul li > div.top>*{vertical-align: middle;}
-.main ul li > div.top>span.name{font-weight:600;font-size:20px;}
+.main ul li > div.top>span.name{font-weight:600;font-size:20px;cursor:pointer;}
 .main ul li > div.top>span.created{float:right;margin-top:20px;}
-.main ul li img{width:60px;margin-right: 10px;}
+.main ul li img{width:60px;margin-right: 10px;cursor:pointer;}
 .main ul li > div.bottom{padding-left:60px;padding-left: 76px;color:#00B2FF;}
 .main ul li.ownByme > div.bottom{padding-left:60px;padding-left: 76px;color:#000;}

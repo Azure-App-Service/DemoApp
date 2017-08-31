@@ -1,4 +1,5 @@
 import { Component, OnInit,Inject } from '@angular/core';
+import { Router} from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { Constants } from '../util/constants';
 import { AuthHelper } from "../util/authHelper";
@@ -26,6 +27,7 @@ export class ChatComponent implements OnInit {
 
   self:ChatComponent;
   constructor(private chatService: ChatService,
+              private router: Router,
               private profileService:ProfileService,
               @Inject('auth') private auth: AuthHelper) {}
  
@@ -50,7 +52,7 @@ export class ChatComponent implements OnInit {
       if(sendMsgs.length>1)
         return;
       //console.log('begin send sms');
-      this.chatService.sendSMS(sendMsgs[0].profile.phone_number,sendMsgs[0].content);
+      this.chatService.sendSMS(this.friendProfile.phone_number,sendMsgs[0].content);
   }
 
   initProfiles(friendId:number,callBack){
@@ -99,6 +101,11 @@ export class ChatComponent implements OnInit {
                 this.btnDisabled = false;
              }
          );
+  }
+
+  viewProfile(id:string):void{
+    if(id)
+      this.router.navigate(['profile',id]);
   }
 
 }

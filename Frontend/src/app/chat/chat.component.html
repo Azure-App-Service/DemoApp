@@ -12,8 +12,8 @@
         <ul  *ngFor="let message of existedMessages" >
             <li [class.ownByme]="message.ownByMe">
                 <div class="top">
-                    <img  src="{{message.profile?.avatar_url}}" />
-                    <span class="name">{{message.profile?.name}}</span>
+                    <img  src="{{message.profile?.avatar_url}}"  (click)="viewProfile(message.profile?.id)"   />
+                    <span class="name"  (click)="viewProfile(message.profile?.id)" >{{message.profile?.name}}</span>
                     <span class="created">{{message.created}}</span>
                 </div>
                 <div class="bottom">

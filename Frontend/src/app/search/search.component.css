@@ -38,7 +38,7 @@ div .btn { margin: 5px 10px; }
 .search .result .person{width: 48%; display:inline-block;text-align:left;padding: 15px 5px 15px 5px;}
 .search .result .person .profile{background-image: url(/assets/images/profile-none.png);background-position: 0px 0px;background-size: 117px 117px;background-repeat: no-repeat;width: 117px;height: 117px;display: inline-block;cursor:pointer;}
 .search .result .person  .info{display: inline-block; width: 210px}
-.search .result .person  .info .name{font-weight:600;}
+.search .result .person  .info .name{font-weight:600;cursor:pointer;}
 .search .result .person  .info .position{font-size:15px;margin-top: -10px;width:210px;}
 .search .result .person  .info .position ul{list-style:none;padding-left:0;width:210px;}
 .search .result .person  .info .position li{width:210px;}

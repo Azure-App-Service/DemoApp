@@ -200,6 +200,14 @@ The following image shows the detail of a custom event.  In this example, the /a
 
 ![](Images/application-insights-2.jpg)
 
+### Geo-Replication
+
+Because this is a sample application that is designed for anyone in the world to deploy their own isolated instance, the databases in the application are created each time the ARM template deploys the solution.  The web apps are tied directly to the databases that are deployed.
+
+Since this is the case, if you Geo-Replicate the solution, each Geo-Location will have a separate copy of the databases.  You are still able to demonstrate Geo-Replicating the app as part of the demo, but if you Geo-Replicate the solution then subsequently logged into an instance of the app in the US with one user, and logged into an instance of the App in China with another user, they would not be able to see each other in search results or chat because they are interacting with separate databases.
+ 
+In a real production scenario, there would be a common database, or multiple databases with a database sync.  This would provide the ability to use the Traffic Manager to load balance traffic across multiple Geo-Locations and achieve global scale with the solution.  You can re-architect the solution to provide these capabilities.
+
 ## Deployment
 
 ### Choose a name for the app
@@ -208,16 +216,22 @@ The name of the application is 'Developer Finder'. We suggest you follow the nam
 
 ​	**developer-finder-[suffix]**
 
-The suffix is used to avoid Azure resource naming conflicts. It is strongly recommended you only use lowercase letters (a-z), numbers (0-9), and hyphens (-). 
+The suffix is used to avoid Azure resource naming conflicts. 
+
+> **IMPORTANT NOTE: Only use lowercase letters (a-z), numbers (0-9), and hyphens (-).  Uppercase letters will cause errors to occur.**
 
 Below are some examples:
 
 * developer-finder-contoso (company name is used)
 * developer-finder-0901-1200 (date and time are used)
 
-In this document, we use the first example to show you how to deploy the solution to Azure. When you are finished with the deployment, you will be able to visit it by navigating to this URL in a web browser:
+In this document, we use the first example to show you how to deploy the solution to Azure. When you are finished with the deployment, you will be able to browse to the web application by navigating to this URL in a web browser:
 
-​	https://developer-finder-contoso.azurewebsites.net
+	https://developer-finder-[suffix].azurewebsites.net
+
+​	Example that matches the example in this document: 
+
+	https://developer-finder-contoso.azurewebsites.net
 
 ### Register OAuth applications
 
@@ -442,10 +456,6 @@ If you wish to enable the SMS capabilities in the application you must create a 
 
      Use the client id and secret of the LinkedIn OAuth app.
 
-   * Twilio Account SID & Auth Token & From Phone Number.
-
-     Use the values you got from you Twilio account.
-
    * Database Admin Login Name: 
 
      It cannot be 'azure_superuser', 'admin', 'administrator', 'root', 'guest' or 'public'.
@@ -454,9 +464,14 @@ If you wish to enable the SMS capabilities in the application you must create a 
 
      This field should be between 8 and 128 characters long. Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.).
 
-   * Ruby Chat Docker Image
+   * Ruby Chat Docker Image:
 
-   **TODO: Need to add the path to this image.**
+     Please keep the default value: *appsvc/demoapp-rubychat*.
+
+
+   * Twilio Account SID & Auth Token & From Phone Number.
+
+     Use the values you got from you Twilio account.
 
    * Source Code Repository URL:
 
