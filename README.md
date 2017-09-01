@@ -325,11 +325,13 @@ To start, you must register OAuth applications for GitHub and LinkedIn. These OA
 
    - Enter a value in the **Token description** text box.
 
-   - Select the following checkboxes (your selections should match the screenshot below):
+   - Select the following scopes (your selections should match the screenshot below):
 
      - repo -> repo:status, repo_deployment, public_repo
 
-     - admin:repo_hook -> read:repo_hook
+     - user -> read:user, user:emial, user:follow
+
+       > Note: the user scope itself must be selected.
 
        ![](Images/github-new-personal-access-token.png)
 
