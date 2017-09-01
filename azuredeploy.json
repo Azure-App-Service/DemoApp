@@ -511,7 +511,7 @@
                                   "Logic App": 0
                               },
                               "Properties": {
-                                  "Description": "[concat(variables('sendSMSLogicAppName'),'Send-sms logic app completed')]",
+                                  "Description": "SendSMS Logic App completed",
                                   "LogType": "Status Log"
                               }
                           },
@@ -530,7 +530,7 @@
                                   "Logic App": 0
                               },
                               "Properties": {
-                                  "Description": "[concat(variables('sendSMSLogicAppName'),'Send-sms logic app started')]",
+                                  "Description": "SendSMS Logic App started",
                                   "LogType": "Status Log"
                               }
                           },
