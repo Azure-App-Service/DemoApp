@@ -1,4 +1,4 @@
-FROM tylerlu/python-node-nginx:alpine-3.6
+FROM appsvc/demoapp-base:latest
 
 ### SSH Server
 RUN echo "root:Docker!" | chpasswd \
