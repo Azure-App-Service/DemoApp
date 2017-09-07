@@ -1,0 +1,73 @@
+section {
+    padding-bottom: 40px;
+}
+
+nav.navbar {
+    margin-bottom: 30px;
+}
+
+.container {
+    margin: 15px;
+}
+
+img {
+    max-width: 600px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.blockquote {
+    font-size: 1rem;
+}
+
+.clean {
+    background: #fff;
+    padding-top: 15px;
+}
+
+dl > dd {
+    padding-left: 40px;
+}
+
+/**/
+
+h2 {
+    margin: 1em 0 0.5em 0;
+    font-size: 1.6rem;
+}
+
+p {
+    margin: 0.5em 0;
+    line-height: 1.5em;  
+} 
+
+li {
+    margin: 0.25em 0;
+    line-height: 1.5em;
+}
+
+li p, blockquote p {
+    margin: 0;
+}
+
+pre {
+    margin: 0;
+    line-height: 1.5em;
+}
+
+.blockquote {
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+}
+
+img {
+    margin: 0.5em 0;
+}
+
+table {
+    margin: 0.5em 0;
+}
+
+img.card-img-top {
+    margin: 10px;
+}

@@ -1,0 +1,116 @@
+--- 
+title: Welcome to Developer Finder
+description:
+--- 
+
+{% capture welcome_content %}{% include welcome.md %}{% endcapture %}
+
+<section>
+    {{ welcome_content | markdownify }}
+
+    <table class="table">
+        <thead>
+            <th>Azure Services</th>
+            <th>Other technologies</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <dl>
+                        <dt>Web App for Containers</dt>
+                        <dd>Developer Finder</dd>
+                        <dd>Ruby Chat</dd>
+                        <dt>Logic Apps</dt>
+                        <dd>send-sms</dd>
+                        <dt>Function Apps</dt>
+                        <dd>TrackCustomEvent</dd>
+                        <dt>Azure Database for MySQL</dt>
+                        <dd>developer_finder</dd>
+                        <dt>Azure Database for PostgreSQL</dt>
+                        <dd>chat</dd>
+                        <dt>Container Registry</dt>
+                        <dt>Storage Account</dt>
+                        <dt>API Connection</dt>
+                        <dd>Twilio</dd>
+                        <dt>Application Insights</dt>
+                        <dt>ARM Templates</dt>
+                    </dl>
+                </td>
+                <td>
+                    <dl>
+                        <dt>Python <small>3.6.2</small></dt>
+                        <dd>Flask</dd>
+                        <dd>Python Social Auth</dd>
+                        <dd>peewee</dd>
+                        <dt>Ruby <small>2.4.1</small></dt>
+                        <dd>Rails</dd>
+                        <dt>Nginx</dt>
+                        <dt>Docker</dt>
+                    </dl>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section id="documents">
+    <h2>Downloads</h2>
+    <br>
+    <div class="card-group">
+        {% for item in site.data.downloads %}
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">{{item.name}}</h4>
+                <p class="card-text"><small class="text-muted">{{ item.description }}</small></p>
+                <a href="{{item.path | prepend: site.baseurl}}" class="btn btn-success">Download</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="contributors">
+    <h2>Contributors</h2>
+    <br>
+    <div class="card-columns">
+        {% for member in site.data.members %}
+        <div class="card">
+            {% if member.id %} <img class="card-img-top" src="https://avatars.githubusercontent.com/u/{{ member.id }}?s=80" alt="Card image cap" /> 
+            {% else %} <img class="card-img-top" src="https://gravatar.com/avatar/?d=mm" alt="Card image cap" /> {% endif%}            
+            <div class="card-block">
+                <h4 class="card-title">{{ member.name }}</h4>
+                <p class="card-text"><small class="text-muted">{{member.role}}</small><br><small>{{ member.company }}</small></p>
+                {% if member.github %}<a href="https://github.com/{{ member.github }}"><i class=""></i>Github</a>{% endif
+                %} {% if member.twitter %}<a href="https://twitter.com/{{ member.twitter }}"><i class=""></i>Twitter</a>{%
+                endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="history">
+    <h2>History</h2>
+    <br>
+    <table class="table table-hover">
+        <thead class="thead-inverse">
+            <th>Version</th>
+            <th>Release Date</th>
+            <th>Comments</th>
+        </thead>
+        <tbody>
+            {% for history in site.data.versions %}
+            <tr>
+                <td>{{history.version}}</td>
+                <td>{{history.date}}</td>
+                <td>{{history.comments}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section id="license">
+    <h2>License</h2>
+    <br> See <a href="https://github.com/{{site.githubOrg}}/{{site.githubRepo}}/blob/master/LICENSE" target="_blank">LICENSE</a>
+</section>

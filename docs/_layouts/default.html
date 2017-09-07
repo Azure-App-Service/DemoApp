@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-Frame-Options" content="deny">
+    <meta name="description" content="{{ page.description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- force most recent IE rendering engine -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<link rel="icon" type="image/x-icon" href="/favicon.ico" />-->
+
+    <!-- Bootstrap CDN -->
+    <script src="https://code.jquery.com/jquery.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
+        crossorigin="anonymous">
+
+    <!-- Highlightjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/site.css?v=201709071045">
+
+    <title>{% if page.title %} {{ page.title }} - {% endif %}{{ site.sample}} Sample Documentation</title>
+</head>
+
+<body class="bg-faded">
+    <nav class="navbar navbar-full navbar-dark bg-primary">
+        <a href="{{ site.baseurl }}">
+            <h1 class="navbar-brand mb-0">{{ site.sample }} <small>Documentation</small></h1>
+        </a>
+        <span class="float-xs-right">
+            <a class="github-button" href="https://github.com/{{ site.githubOrg }}/{{ site.githubRepo }}/issues" data-icon="octicon-issue-opened" data-count-api="/repos/{{ site.githubOrg }}/{{ site.githubRepo }}#open_issues_count" data-count-aria-label="# issues on GitHub" aria-label="Issue {{ site.githubOrg }}/{{ site.githubRepo }} on GitHub">Issue</a>
+            <a class="github-button" href="https://github.com/{{ site.githubOrg }}/{{ site.githubRepo }}/fork" data-count-href="/{{ site.githubOrg }}/{{ site.githubRepo }}/network" data-count-api="/repos/{{ site.githubOrg }}/{{ site.githubRepo }}#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork {{ site.githubOrg }}/{{ site.githubRepo }} on GitHub">Fork</a>
+        </span>
+    </nav>
+    <div class="container bg-faded">
+        <div class="row">
+            <div class="col-lg-4">
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="card">
+                        <div class="card-header" role="tab" id="SetupHeading">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#Setup" aria-expanded="{% if page.category == "SETUP" or page.category == null %}true{% else %}false{% endif %}" aria-controls="Setup">Set up</a>
+                            </h5>
+                        </div>
+                        <div id="Setup" class="collapse{% if page.category == "SETUP" or page.category == null %} in{% endif %}" role="tabpanel" aria-labelledby="SetupHeading">
+                            <div class="card-block">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for doc in site.categories.SETUP reversed %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{doc.url | prepend: site.baseurl}}">{{doc.title}} {% if doc.optional %}<small class="text-muted">(optional)</small>{% endif %}</a>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% if site.categories.RUN %}
+                    <div class="card">
+                        <div class="card-header" role="tab" id="RunHeading">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Run" aria-expanded="{% if page.category == "RUN" %}true{% else %}false{% endif %}" aria-controls="Run">Give it a run</a>
+                            </h5>
+                        </div>
+                        <div id="Run" class="collapse{% if page.category == "RUN" %} in{% endif %}" role="tabpanel" aria-labelledby="RunHeading">
+                            <div class="card-block">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for doc in site.categories.RUN reversed %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %} {% if site.categories.HOL %}
+                    <div class="card">
+                        <div class="card-header" role="tab" id="HOLHeading">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#HOL" aria-expanded="{% if page.category == "HOL" %}true{% else %}false{% endif %}" aria-controls="HOL">Hands-on Labs</a>
+                            </h5>
+                        </div>
+                        <div id="HOL" class="collapse{% if page.category == "HOL" %} in{% endif %}" role="tabpanel" aria-labelledby="HOLHeading">
+                            <div class="card-block">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for doc in site.categories.HOL %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card">
+                        <div class="card-header" role="tab" id="CleanUpHeading">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#CleanUp" aria-expanded="{% if page.category == "CLEANUP" %}true{% else %}false{% endif %}" aria-controls="CleanUp">Clean Up</a>
+                            </h5>
+                        </div>
+                        <div id="CleanUp" class="collapse{% if page.category == "CLEANUP" %} in{% endif %}" role="tabpanel" aria-labelledby="CleanUpHeading">
+                            <div class="card-block">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for doc in site.categories.CLEANUP reversed %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% if site.categories.ARCHITECTURE %}
+                    <div class="card">
+                        <div class="card-header" role="tab" id="ArchitectureHeading">
+                            <h5 class="mb-0">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Architecture" aria-expanded="{% if page.category == "ARCHITECTURE" %}true{% else %}false{% endif %}" aria-controls="Architecture">Architecture deep dive</a>
+                            </h5>
+                        </div>
+                        <div id="Architecture" class="collapse{% if page.category == "ARCHITECTURE" %} in{% endif %}" role="tabpanel" aria-labelledby="ArchitectureHeading">
+                            <div class="card-block">
+                                <ul class="nav nav-pills nav-stacked">
+                                    {% for doc in site.categories.ARCHITECTURE reversed %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-8 clean">
+                {{ content }}
+            </div>
+        </div>
+    </div>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
+</html>

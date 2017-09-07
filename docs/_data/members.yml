@@ -1,0 +1,31 @@
+- name: Todd Baginski
+  id: 1407310
+  company: Canviz
+  github: tbag
+  twitter: toddbaginski
+  role: Project Lead, Architect, Documentation
+- name: Tyler Lu
+  id: 11844726
+  company: Canviz
+  role: Architect / Developer Lead
+  github: TylerLu
+- name: Albert Xie
+  company: Canviz
+  role: Developer
+- name: Hubert Sui
+  company: Canviz
+  role: Developer
+- name: Cindy Yan
+  company: Canviz
+  role: Testing
+- name: Justin So
+  company: Canviz
+  role: UX Design
+- name: Stella Lin
+  company: Microsoft
+  role: Sponsor, Support
+- name: Ahmed Elnably
+  id: 7810433
+  github: ahmedelnably
+  company: Microsoft
+  role: Sponsor, Support

@@ -1,0 +1,12 @@
+- name: Azure Components <small>(Word Document)</small>
+  description: This download provides context on the different Azure Services used to create the Developer Finder web application.
+  path: /assets/Azure%20Components.docx
+- name: Developer Finder Flow <small>(Visio)</small>
+  description: This download provides a flow diagram of how data flows through the application.
+  path: /assets/Diagrams.vsdx
+- name: Developer Finder Flow <small>(Image/Png)</small>
+  description: This download provides a flow diagram of how data flows through the application.
+  path: /assets/flow.png
+- name: Demo Script <small>(PDF)</small>
+  description: This download provides step-by-step instructions for walking through the application.
+  path: /assets/Demo%20Script.pdf

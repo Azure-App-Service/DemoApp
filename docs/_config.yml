@@ -1,0 +1,17 @@
+sample: Developer Finder
+githubOrg: Azure-App-Service
+githubRepo: DemoApp
+markdown: kramdown
+highlighter: rouge
+gems:
+    - jekyll-gist
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
+      author: Tyler Lu
+      author_github: TylerLu
+keep_files: ['app_data/jobs/triggered','app_data/jobs/continuous']
+baseurl: /DemoApp
