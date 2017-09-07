@@ -41,7 +41,7 @@
         "Korea Central"
       ],
       "metadata": {
-        "description": "Web App on Linux will use the resource group location. Please choose a different region for non-Linux web apps, as they could not be created in the same region and the same resource group."
+        "description": "Web App for Containers will use the resource group location. Please choose a different region for non-Linux web apps, as they could not be created in the same region and the same resource group."
       }
     },
     "oauthGitHubClientID": {

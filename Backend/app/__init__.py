@@ -81,7 +81,8 @@ def unauthorized():
 def before_request_handler():
     if database.is_closed():
         database.connect()
-        database.execute_sql('SET @@auto_increment_increment=1;')
+        if type(database) is MySQLDatabase:
+            database.execute_sql('SET @@auto_increment_increment=1;')
     # evaluate proxy value
     g.user = current_user._get_current_object()
 

@@ -10,9 +10,6 @@ SESSION_PROTECTION = 'basic'
 USE_SQLITE_DATABASE = os.environ.get('USE_SQLITE_DATABASE', 'false')
 SQLITE_DATABASE_URI = '%s/db.sqlite3' % dirname(abspath(join(__file__, '..')))
 
-# Note: right now, environments varialbes could not be passed from Docker commands to here.
-# TODO: remove keys and secrets below 
-
 MYSQL_HOSTNAME = os.environ.get('MYSQL_HOSTNAME')
 MYSQL_USERNAME = os.environ.get('MYSQL_USERNAME')
 MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD')

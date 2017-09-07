@@ -13,7 +13,7 @@ cd ..
 
 echo start the frontend app
 cd Frontend
-# The port must be specified, otherwise 502 Bad Gateway error will occur after deployed to Web App on Linux
+# The port must be specified, otherwise 502 Bad Gateway error will occur after deployed to Web App for Containers
 ng serve --host=0.0.0.0 --port 4200 --disable-host-check &
 cd ..
 
