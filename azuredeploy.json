@@ -160,10 +160,10 @@
       "type": "microsoft.insights/components",
       "name": "[variables('applicationInsightsName')]",
       "apiVersion": "2014-08-01",
-      "location": "East US",
+      "location": "[variables('location')]",
       "kind": "other",
       "properties": {
-          "ApplicationId": "[variables('applicationInsightsName')",    
+          "ApplicationId": "[variables('applicationInsightsName')]",    
           "Application_Type": "other"
       }
     },
@@ -311,7 +311,7 @@
           "name": "Managed_Basic",
           "tier": "Managed"
       },
-      "location": "westcentralus",
+      "location": "[variables('location')]",
       "properties": {
           "adminUserEnabled": true
       }
@@ -319,12 +319,11 @@
     {
       "type": "Microsoft.DBforMySQL/servers",
       "name": "[variables('mySQLServerName')]",
-      "apiVersion": "2017-04-30-preview",
+      "apiVersion": "2017-12-01",
       "location": "[variables('location')]",
       "sku": {
-        "name": "MYSQLB50",
-        "tier": "Basic",
-        "capacity": 50
+        "name": "B_Gen5_1",
+        "tier": "Basic"
       },
       "properties": {
         "administratorLogin": "[parameters('databaseAdminLoginName')]",
@@ -337,7 +336,7 @@
         {
           "type": "databases",
           "name": "[variables('mySQLDatabaseName')]",
-          "apiVersion": "2017-04-30-preview",
+          "apiVersion": "2017-12-01",
           "properties": {
             "charset": "latin1",
             "collation": "latin1_swedish_ci"
@@ -349,7 +348,7 @@
         {
           "type": "firewallRules",
           "name": "all",
-          "apiVersion": "2017-04-30-preview",
+          "apiVersion": "2017-12-01",
           "properties": {
               "startIpAddress": "0.0.0.0",
               "endIpAddress": "255.255.255.255"
@@ -363,12 +362,11 @@
     {
       "type": "Microsoft.DBforPostgreSQL/servers",
       "name": "[variables('postgreSQLServerName')]",
-      "apiVersion": "2017-04-30-preview",
+      "apiVersion": "2017-12-01",
       "location": "[variables('location')]",
       "sku": {
-          "name": "PGSQLB50",
-          "tier": "Basic",
-          "capacity": 50
+          "name": "B_Gen5_1",
+          "tier": "Basic"
       },
       "properties": {
           "administratorLogin": "[parameters('databaseAdminLoginName')]",
@@ -383,7 +381,7 @@
           {
               "type": "databases",
               "name": "[variables('postgreSQLDatabaseName')]",
-              "apiVersion": "2017-04-30-preview",
+              "apiVersion": "2017-12-01",
               "properties": {
                   "charset": "UTF8",
                   "collation": "English_United States.1252"
@@ -395,7 +393,7 @@
           {
             "type": "firewallRules",
             "name": "all",
-            "apiVersion": "2017-04-30-preview",
+            "apiVersion": "2017-12-01",
             "properties": {
                 "startIpAddress": "0.0.0.0",
                 "endIpAddress": "255.255.255.255"

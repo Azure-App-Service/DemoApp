@@ -1,4 +1,4 @@
-FROM appsvc/demoapp-base:latest
+FROM FIXME/demoapp-base:reworked
 
 ### SSH Server
 RUN echo "root:Docker!" | chpasswd \
@@ -22,13 +22,13 @@ RUN npm install -g @angular/cli
 ADD ./Frontend /app/Frontend
 WORKDIR /app/Frontend
 RUN npm install
+RUN npm audit fix
 
 ### Nginx
-RUN apk add --update --no-cache build-base linux-headers \
-    && pip install uwsgi \
-    && mkdir /var/log/uwsgi
+RUN apk add --update --no-cache uwsgi-python3
 COPY backend_uwsgi.ini /app/Backend/uwsgi.ini
 COPY nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /run/nginx
 
 EXPOSE 2222 80 
 
